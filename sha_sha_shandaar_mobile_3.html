@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sha Sha Shandaar Shawarma</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sf:#E8A838;--sf-dim:#FFF3DC;--ember:#C23B22;--ember-dim:#FEE2E2;
+  --coal:#1B1B2F;--coal2:#2D2D4E;--cream:#FFFAF3;
+  --sage:#27AE60;--sage-dim:#EAFAF1;--sky:#2D9CDB;--sky-dim:#EBF5FB;
+  --txt:#1B1B2F;--muted:#6B7280;--bdr:#E5E7EB;--wh:#fff;
+  --R:14px;--BNH:64px;--HH:56px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Inter',sans-serif;background:#d0d0d0;
+  display:flex;justify-content:center;align-items:center;}
+#app{width:390px;height:844px;background:var(--cream);border-radius:44px;
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+  box-shadow:0 40px 100px rgba(0,0,0,0.4),0 0 0 11px #111,0 0 0 13px #444;}
+
+/* HEADER */
+.hd{height:var(--HH);background:var(--coal);display:flex;align-items:center;
+  padding:0 16px;flex-shrink:0;z-index:10;gap:10px;}
+.hd-brand{font-family:'Poppins',sans-serif;font-weight:800;font-size:13.5px;
+  color:var(--sf);line-height:1.2;flex:1;}
+.hd-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;
+  color:var(--wh);flex:1;}
+.hd-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.09);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.7);flex-shrink:0;}
+.hd-btn:active{opacity:.6;}
+.hd-btn .dot{position:absolute;top:5px;right:5px;width:7px;height:7px;
+  background:var(--ember);border-radius:50%;border:1.5px solid var(--coal);}
+.hd-btn{position:relative;}
+
+/* CONTENT */
+.cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--cream);}
+.cnt::-webkit-scrollbar{display:none;}
+
+/* BOTTOM NAV */
+.bn{height:var(--BNH);background:var(--wh);border-top:1px solid var(--bdr);
+  display:flex;flex-shrink:0;}
+.nv{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;cursor:pointer;border:none;background:none;
+  color:var(--muted);font-size:10px;font-family:'Inter',sans-serif;font-weight:500;}
+.nv svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;}
+.nv.active{color:var(--sf);}
+.nv:active{opacity:.6;}
+.nv .nb{background:var(--ember);color:#fff;font-size:9px;font-weight:700;
+  padding:1px 5px;border-radius:8px;margin-top:-2px;line-height:1.4;}
+
+/* FAB */
+.fab{position:absolute;bottom:calc(var(--BNH)+14px);right:16px;
+  width:52px;height:52px;border-radius:16px;background:var(--sf);
+  border:none;cursor:pointer;display:none;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(232,168,56,.5);z-index:5;color:var(--coal);}
+.fab:active{transform:scale(.94);}
+
+/* BOTTOM SHEET */
+.ov{position:absolute;inset:0;background:rgba(27,27,47,.55);
+  z-index:100;display:none;align-items:flex-end;}
+.ov.on{display:flex;}
+.bs{width:100%;background:var(--wh);border-radius:20px 20px 0 0;
+  padding:20px 20px 40px;max-height:88%;overflow-y:auto;}
+.bs::-webkit-scrollbar{display:none;}
+.bsh{width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 16px;}
+.bst{font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;margin-bottom:14px;}
+
+/* CARDS */
+.card{background:var(--wh);border-radius:var(--R);border:1px solid var(--bdr);margin-bottom:12px;overflow:hidden;}
+.cb{padding:14px 16px;}
+
+/* BUTTONS */
+.btn{font-family:'Inter',sans-serif;font-weight:600;border:none;cursor:pointer;
+  border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn:active{opacity:.72;}
+.btn-p{background:var(--sf);color:var(--coal);}
+.btn-s{background:var(--wh);color:var(--txt);border:1.5px solid var(--bdr);}
+.btn-d{background:var(--ember-dim);color:var(--ember);}
+.btn-g{background:var(--sage-dim);color:var(--sage);}
+.btn-sky{background:var(--sky-dim);color:var(--sky);border:1.5px solid #bee3f8;}
+.btn-full{width:100%;padding:14px;font-size:15px;border-radius:12px;}
+.btn-sm{padding:7px 14px;font-size:12.5px;border-radius:8px;}
+.btn-md{padding:10px 18px;font-size:13.5px;}
+
+/* BADGES */
+.bge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.bg-pending{background:#FEF3C7;color:#B45309;}
+.bg-fulfilled{background:#DBEAFE;color:#1D4ED8;}
+.bg-delivered{background:var(--sage-dim);color:var(--sage);}
+.bg-amended{background:#EDE9FE;color:#6D28D9;}
+.bg-paid{background:var(--sage-dim);color:var(--sage);}
+.bg-unpaid{background:var(--ember-dim);color:var(--ember);}
+.bg-overdue{background:var(--ember-dim);color:var(--ember);}
+
+/* CHIPS */
+.cr{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px;scrollbar-width:none;}
+.cr::-webkit-scrollbar{display:none;}
+.chip{padding:7px 15px;border-radius:20px;font-size:12.5px;font-weight:600;
+  white-space:nowrap;cursor:pointer;border:1.5px solid var(--bdr);
+  background:var(--wh);color:var(--muted);flex-shrink:0;}
+.chip.on{background:var(--sf);color:var(--coal);border-color:var(--sf);}
+.chip:active{opacity:.7;}
+
+/* STATS */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.sc{background:var(--wh);border-radius:var(--R);border:1px solid var(--bdr);
+  padding:14px;cursor:pointer;}
+.sc:active{background:#fafafa;}
+.sl{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.05em;margin-bottom:6px;}
+.sv{font-family:'Poppins',sans-serif;font-weight:700;font-size:22px;line-height:1;}
+.ss{font-size:11px;margin-top:4px;font-weight:600;}
+.up{color:var(--sage);}.dn{color:var(--ember);}.nt{color:var(--muted);}
+
+/* FORM */
+.fl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;display:block;
+  text-transform:uppercase;letter-spacing:.05em;}
+.fi{width:100%;padding:11px 13px;border:1.5px solid var(--bdr);border-radius:10px;
+  font-family:'Inter',sans-serif;font-size:14px;background:var(--wh);color:var(--txt);
+  -webkit-appearance:none;appearance:none;}
+.fi:focus{outline:none;border-color:var(--sf);}
+.fg{margin-bottom:12px;}
+
+/* ORDER ROW */
+.or{padding:14px 16px;border-bottom:1px solid var(--bdr);cursor:pointer;
+  display:flex;align-items:center;gap:12px;}
+.or:last-child{border-bottom:none;}
+.or:active{background:#f9fafb;}
+.oi{flex:1;}
+.oid{font-weight:700;font-size:14px;}
+.om{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* CATALOG */
+.ci{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bdr);gap:12px;}
+.ci:last-child{border-bottom:none;}
+.cic{width:42px;height:42px;border-radius:12px;background:var(--sf-dim);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cn{font-weight:600;font-size:14px;}
+.cp{font-size:12px;color:var(--muted);margin-top:2px;}
+.qc{display:flex;align-items:center;gap:8px;}
+.qb{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;
+  font-size:18px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+.qb.minus{background:var(--bdr);color:var(--txt);}
+.qb.plus{background:var(--sf);color:var(--coal);}
+.qb:active{opacity:.7;}
+.qv{font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;min-width:24px;text-align:center;}
+.afb{background:var(--sf-dim);color:var(--sf);border:1.5px dashed var(--sf);
+  width:32px;height:32px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;cursor:pointer;}
+.afb:active{opacity:.7;}
+
+/* SUMMARY ROW */
+.sr{display:flex;justify-content:space-between;padding:8px 0;font-size:13.5px;
+  border-bottom:1px solid var(--bdr);}
+.sr:last-child{border-bottom:none;}
+.sr.tot{font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;}
+
+/* SUGGESTION */
+.sug{background:var(--sf-dim);border:1px dashed var(--sf);border-radius:12px;
+  padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.sug-tag{font-size:10px;background:var(--sf);color:var(--coal);
+  padding:2px 7px;border-radius:6px;font-weight:700;display:inline-block;margin-bottom:3px;}
+
+/* NOTIF */
+.ni{display:flex;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bdr);}
+.ni:last-child{border-bottom:none;}
+.ni.unr{background:#fffbf0;}
+.ndot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.nd-info{background:var(--sky);}
+.nd-warn{background:var(--sf);}
+.nd-error{background:var(--ember);}
+.nd-success{background:var(--sage);}
+
+/* INVENTORY */
+.ii{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bdr);gap:12px;}
+.ii:last-child{border-bottom:none;}
+.ibw{height:6px;background:var(--bdr);border-radius:4px;margin-top:5px;}
+.ib{height:100%;border-radius:4px;}
+.ist{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.in-s{background:var(--sage-dim);color:var(--sage);}
+.lo-s{background:var(--sf-dim);color:#B45309;}
+.ou-s{background:var(--ember-dim);color:var(--ember);}
+
+/* RECONCILE */
+.rci{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;}
+.rci:last-child{border-bottom:none;}
+.rcb{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.rcb.ok{background:var(--sage-dim);color:var(--sage);}
+.rcb.fl{background:var(--ember-dim);color:var(--ember);}
+
+/* WASTAGE */
+.wi{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bdr);gap:12px;}
+.wi:last-child{border-bottom:none;}
+
+/* PNL */
+.prow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bdr);font-size:13.5px;}
+.prow:last-child{border-bottom:none;}
+.prow.ph{font-weight:700;font-size:14px;}
+.pos{color:var(--sage);font-weight:600;}
+.neg{color:var(--ember);font-weight:600;}
+
+/* CHART */
+.chrt{display:flex;align-items:flex-end;gap:5px;height:80px;}
+.chrt-b{flex:1;border-radius:4px 4px 0 0;}
+
+/* REPORT BAR */
+.rb{padding:11px 0;border-bottom:1px solid var(--bdr);}
+.rb:last-child{border-bottom:none;}
+.rb-h{display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px;font-weight:600;}
+.rb-t{height:6px;background:var(--bdr);border-radius:3px;}
+.rb-f{height:100%;border-radius:3px;background:var(--sf);}
+
+/* DETAIL ITEM */
+.di{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr);}
+.di:last-child{border-bottom:none;}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.st{font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:var(--txt);}
+.sa{font-size:12.5px;font-weight:600;color:var(--sf);background:none;border:none;cursor:pointer;}
+
+/* PROGRESS */
+.pr-r{margin-bottom:14px;}
+.pr-l{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;font-weight:500;}
+.pr-t{height:8px;background:var(--bdr);border-radius:4px;}
+.pr-f{height:100%;border-radius:4px;}
+
+/* TOAST */
+.toast{position:absolute;bottom:calc(var(--BNH)+12px);left:12px;right:12px;
+  background:var(--coal);color:var(--wh);padding:13px 16px;border-radius:12px;
+  font-size:13.5px;font-weight:500;display:none;z-index:200;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);align-items:center;gap:10px;}
+.toast.on{display:flex;}
+
+/* MISC */
+.dvd{height:1px;background:var(--bdr);margin:12px 0;}
+.pay-card{background:var(--wh);border-radius:var(--R);border:1px solid var(--bdr);padding:16px;margin-bottom:12px;}
+.pay-card.ov{border-color:var(--ember);}
+.emp{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+.emp .em{font-size:36px;margin-bottom:10px;}
+.sec{padding:16px;}
+.sec>*+*{margin-top:0;}
+.more-row{padding:15px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:14px;cursor:pointer;}
+.more-row:last-child{border-bottom:none;}
+.more-row:active{background:#fafafa;}
+.more-ico{width:44px;height:44px;border-radius:12px;background:var(--sf-dim);
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="hd" id="hd"></header>
+  <div class="cnt" id="cnt"></div>
+  <nav class="bn" id="bn">
+    <button class="nv active" id="nv-home" onclick="nav('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Home
+    </button>
+    <button class="nv" id="nv-orders" onclick="nav('orders')">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>Orders
+    </button>
+    <button class="nv" id="nv-finance" onclick="nav('finance')">
+      <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Finance
+    </button>
+    <button class="nv" id="nv-ops" onclick="nav('ops')">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Ops
+    </button>
+    <button class="nv" id="nv-more" onclick="nav('more')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>More
+    </button>
+  </nav>
+  <button class="fab" id="fab" onclick="nav('new-order')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+  <!-- SHEETS -->
+  <div class="ov" id="sh-deliver" onclick="if(event.target===this)cls('sh-deliver')">
+    <div class="bs" id="sh-deliver-body"></div>
+  </div>
+
+
+
+  <div class="ov" id="sh-pay" onclick="if(event.target===this)cls('sh-pay')">
+    <div class="bs"><div class="bsh"></div><div class="bst">Make Payment</div>
+      <div id="sh-pay-amt"></div>
+      <div class="fg" style="margin-top:12px;"><label class="fl">Payment Method</label>
+        <select class="fi" id="pay-method"><option>UPI</option><option>Bank Transfer</option><option>Credit Card</option></select></div>
+      <div class="fg"><label class="fl">UPI ID</label><input type="text" class="fi" value="rajesh.koramangala@okaxis"></div>
+      <button class="btn btn-p btn-full" id="pay-go-btn">Confirm Payment</button>
+    </div>
+  </div>
+
+  <div class="ov" id="sh-waste" onclick="if(event.target===this)cls('sh-waste')">
+    <div class="bs"><div class="bsh"></div><div class="bst">Log Wastage</div>
+      <div class="fg"><label class="fl">Item</label><select class="fi" id="w-item">
+        <option>Chicken Shawarma Mix</option><option>Pita Bread</option><option>Garlic Mayo</option>
+        <option>French Fries</option><option>Tahini</option><option>Peri Peri Sauce</option>
+      </select></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="fg"><label class="fl">Quantity</label><input type="number" class="fi" id="w-qty" value="1" min="0.5" step="0.5"></div>
+        <div class="fg"><label class="fl">Unit</label><select class="fi" id="w-unit"><option>kg</option><option>units</option></select></div>
+      </div>
+      <div class="fg"><label class="fl">Reason</label><select class="fi" id="w-reason">
+        <option>Expired</option><option>Spoiled</option><option>Damaged in transit</option><option>Overproduction</option><option>Other</option>
+      </select></div>
+      <button class="btn btn-p btn-full" onclick="doWaste()">Log Wastage</button>
+    </div>
+  </div>
+
+  <div class="ov" id="sh-confirm" onclick="if(event.target===this)cls('sh-confirm')">
+    <div class="bs"><div class="bsh"></div><div class="bst">Review Your Order</div>
+      <div id="sh-confirm-body"></div>
+      <button class="btn btn-p btn-full" style="margin-top:16px;" onclick="doPlaceOrder()">Place Order</button>
+      <button class="btn btn-s btn-full" style="margin-top:8px;" onclick="cls('sh-confirm')">Back to Edit</button>
+    </div>
+  </div>
+
+  <div class="ov" id="sh-expense" onclick="if(event.target===this)cls('sh-expense')">
+    <div class="bs">
+      <div class="bsh"></div>
+      <div class="bst">Add Expense</div>
+      <div class="fg">
+        <label class="fl">Category</label>
+        <select class="fi" id="exp-cat">
+          <option>Rent &amp; Utilities</option>
+          <option>Staff / Labour</option>
+          <option>Transport</option>
+          <option>Packaging</option>
+          <option>Marketing</option>
+          <option>Equipment Repair</option>
+          <option>Cleaning</option>
+          <option>Licensing</option>
+          <option>Miscellaneous</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Amount (₹)</label>
+        <input type="number" class="fi" id="exp-amt" placeholder="e.g. 5000" min="1" step="1">
+      </div>
+      <div class="fg">
+        <label class="fl">Date</label>
+        <input type="date" class="fi" id="exp-date" value="2026-07-26">
+      </div>
+      <div class="fg">
+        <label class="fl">Notes</label>
+        <textarea class="fi" id="exp-notes" rows="2" style="resize:none;" placeholder="What was this expense for?"></textarea>
+      </div>
+      <button class="btn btn-p btn-full" onclick="doExpense()">Save Expense</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+// ── DATA ──
+const catalog=[
+  {id:'c1',name:'Chicken Shawarma Mix',price:300,unit:'kg',em:'🍖',cat:'Meat'},
+  {id:'c2',name:'Pita Bread',price:15,unit:'units',em:'🫓',cat:'Bread'},
+  {id:'c3',name:'Garlic Mayo',price:200,unit:'kg',em:'🧄',cat:'Sauce'},
+  {id:'c4',name:'Peri Peri Sauce',price:300,unit:'kg',em:'🌶️',cat:'Sauce'},
+  {id:'c5',name:'French Fries',price:120,unit:'kg',em:'🍟',cat:'Sides'},
+  {id:'c6',name:'Hummus',price:350,unit:'kg',em:'🫙',cat:'Dips'},
+  {id:'c7',name:'Tahini',price:450,unit:'kg',em:'🥗',cat:'Sauce'},
+  {id:'c8',name:'Pickled Turnips',price:180,unit:'kg',em:'🥒',cat:'Sides'},
+];
+const recipes={
+  c1:[{id:'c3',label:'Pairs with Chicken'},{id:'c4',label:'Recommended pairing'}],
+  c2:[{id:'c6',label:'Suggested for Pita'}],
+  c6:[{id:'c7',label:'Classic hummus combo'}],
+};
+const pxMap={'Chicken Shawarma Mix':300,'Pita Bread':15,'Garlic Mayo':200,'French Fries':120,'Tahini':450,'Peri Peri Sauce':300,'Pickled Turnips':180,'Hummus':350};
+
+const S={
+  screen:'home', sub:null,
+  oFilter:'all', catFilter:'All', finTab:'payments', opsTab:'inventory', rptTab:'item',
+  cart:[], selOrder:null, selPay:null,
+  recFlags:{},
+  expCatFilter:'All',
+
+  expenses:[
+    {id:'e1',cat:'Rent & Utilities',icon:'🏠',amt:42000,date:'01 Jul 2026',notes:'Monthly rent + electricity bill'},
+    {id:'e2',cat:'Staff / Labour',icon:'👥',amt:28000,date:'01 Jul 2026',notes:'Part-time staff wages'},
+    {id:'e3',cat:'Transport',icon:'🚗',amt:3200,date:'05 Jul 2026',notes:'Delivery vehicle fuel'},
+    {id:'e4',cat:'Packaging',icon:'📦',amt:8500,date:'08 Jul 2026',notes:'Shawarma wrappers and boxes (500 units)'},
+    {id:'e5',cat:'Marketing',icon:'📱',amt:5000,date:'10 Jul 2026',notes:'Instagram sponsored ads'},
+    {id:'e6',cat:'Equipment Repair',icon:'🛠️',amt:2800,date:'13 Jul 2026',notes:'Grill servicing'},
+    {id:'e7',cat:'Cleaning',icon:'🧹',amt:1200,date:'15 Jul 2026',notes:'Monthly cleaning supplies'},
+    {id:'e8',cat:'Transport',icon:'🚗',amt:1800,date:'19 Jul 2026',notes:'Emergency restock run'},
+    {id:'e9',cat:'Licensing',icon:'📝',amt:4500,date:'20 Jul 2026',notes:'FSSAI renewal fee'},
+    {id:'e10',cat:'Miscellaneous',icon:'💼',amt:950,date:'24 Jul 2026',notes:'Office stationery and printing'},
+  ],
+
+  notifs:[
+    {id:'n1',type:'error',txt:'Payment overdue: <b>#INV-0983</b> for ₹6,395 is 3 days past due.',time:'Today 10:30 AM',read:false,action:'pay'},
+    {id:'n2',type:'warn',txt:'Stock alert: <b>Pita Bread</b> running low — 80 units left (avg: 200/week).',time:'Today 8:15 AM',read:false},
+    {id:'n3',type:'success',txt:'Order <b>#ORD-1042</b> delivered. Please reconcile.',time:'Yesterday 4:45 PM',read:false,action:'recon'},
+    {id:'n4',type:'info',txt:'Amendment approved for <b>#ORD-1040</b>. Revised invoice generated.',time:'21 Jul 11:20 AM',read:true},
+    {id:'n5',type:'info',txt:'"Shawarma Spice Blend" is now available to order.',time:'20 Jul 9:00 AM',read:true},
+    {id:'n6',type:'warn',txt:'Price update: Chicken Shawarma Mix → ₹300/kg from 1 Aug 2026.',time:'18 Jul 2:30 PM',read:true},
+  ],
+
+  orders:[
+    {id:'ORD-1042',date:'25 Jul 2026',
+      items:[{name:'Chicken Shawarma Mix',qty:5,unit:'kg',price:300,total:1500},{name:'Pita Bread',qty:200,unit:'units',price:15,total:3000},{name:'Garlic Mayo',qty:2.5,unit:'kg',price:200,total:500},{name:'Peri Peri Sauce',qty:1,unit:'kg',price:300,total:300},{name:'French Fries',qty:10,unit:'kg',price:120,total:1200},{name:'Hummus',qty:3,unit:'kg',price:350,total:1050}],
+      subtotal:7550,gst:378,total:7928,status:'delivered',pay:'paid',reconciled:false,
+      ri:[{n:'Chicken Shawarma Mix',ord:'5 kg',got:'5 kg',ok:true},{n:'Pita Bread',ord:'200 units',got:'200 units',ok:true},{n:'Garlic Mayo',ord:'2.5 kg',got:'2 kg',ok:false,diff:'-0.5 kg'},{n:'Peri Peri Sauce',ord:'1 kg',got:'1 kg',ok:true},{n:'French Fries',ord:'10 kg',got:'10 kg',ok:true},{n:'Hummus',ord:'3 kg',got:'3.5 kg',ok:false,diff:'+0.5 kg'}]},
+    {id:'ORD-1041',date:'22 Jul 2026',
+      items:[{name:'Chicken Shawarma Mix',qty:8,unit:'kg',price:300,total:2400},{name:'Pita Bread',qty:150,unit:'units',price:15,total:2250},{name:'Tahini',qty:2,unit:'kg',price:450,total:900},{name:'Pickled Turnips',qty:3,unit:'kg',price:180,total:540}],
+      subtotal:6090,gst:305,total:6395,status:'fulfilled',pay:'unpaid'},
+    {id:'ORD-1040',date:'19 Jul 2026',
+      items:[{name:'Garlic Mayo',qty:3,unit:'kg',price:200,total:600},{name:'Peri Peri Sauce',qty:2,unit:'kg',price:300,total:600},{name:'Hummus',qty:4,unit:'kg',price:350,total:1400}],
+      subtotal:2600,gst:130,total:2730,status:'amended',pay:'paid'},
+    {id:'ORD-1039',date:'15 Jul 2026',
+      items:[{name:'Chicken Shawarma Mix',qty:10,unit:'kg',price:300,total:3000},{name:'French Fries',qty:20,unit:'kg',price:120,total:2400},{name:'Pita Bread',qty:300,unit:'units',price:15,total:4500},{name:'Garlic Mayo',qty:5,unit:'kg',price:200,total:1000}],
+      subtotal:10900,gst:545,total:11445,status:'delivered',pay:'paid'},
+    {id:'ORD-1038',date:'12 Jul 2026',
+      items:[{name:'Tahini',qty:3,unit:'kg',price:450,total:1350},{name:'Hummus',qty:5,unit:'kg',price:350,total:1750},{name:'Pickled Turnips',qty:4,unit:'kg',price:180,total:720}],
+      subtotal:3820,gst:191,total:4011,status:'pending',pay:'unpaid'},
+  ],
+
+  pending:[
+    {id:'P1',inv:'INV-0983',oid:'ORD-1041',amt:6395,due:'23 Jul 2026',st:'overdue'},
+    {id:'P2',inv:'INV-0985',oid:'ORD-1038',amt:4011,due:'28 Jul 2026',st:'pending'},
+  ],
+  phist:[
+    {inv:'INV-0982',oid:'ORD-1042',amt:7928,method:'UPI',date:'25 Jul 2026',st:'paid'},
+    {inv:'INV-0979',oid:'ORD-1040',amt:2730,method:'Bank Transfer',date:'20 Jul 2026',st:'paid'},
+    {inv:'INV-0976',oid:'ORD-1039',amt:11445,method:'UPI',date:'16 Jul 2026',st:'paid'},
+    {inv:'INV-0970',oid:'ORD-1036',amt:9500,method:'UPI',date:'8 Jul 2026',st:'failed'},
+    {inv:'INV-0970',oid:'ORD-1036',amt:9500,method:'Bank Transfer',date:'9 Jul 2026',st:'paid'},
+  ],
+
+  inv:[
+    {name:'Chicken Shawarma Mix',stock:12,max:30,unit:'kg',em:'🍖',last:'25 Jul'},
+    {name:'Pita Bread',stock:80,max:400,unit:'units',em:'🫓',last:'25 Jul'},
+    {name:'Garlic Mayo',stock:6,max:20,unit:'kg',em:'🧄',last:'25 Jul'},
+    {name:'Peri Peri Sauce',stock:1.2,max:10,unit:'kg',em:'🌶️',last:'22 Jul'},
+    {name:'French Fries',stock:18,max:30,unit:'kg',em:'🍟',last:'22 Jul'},
+    {name:'Chicken Breast 65mm',stock:0,max:15,unit:'kg',em:'🐔',last:'15 Jul'},
+    {name:'Tahini',stock:0.8,max:8,unit:'kg',em:'🥗',last:'19 Jul'},
+    {name:'Hummus',stock:5,max:15,unit:'kg',em:'🫙',last:'25 Jul'},
+  ],
+
+  waste:[
+    {item:'Pita Bread',qty:'80 units',val:1200,reason:'Expired',date:'24 Jul'},
+    {item:'Chicken Shawarma Mix',qty:'2 kg',val:600,reason:'Spoiled',date:'23 Jul'},
+    {item:'Pita Bread',qty:'60 units',val:900,reason:'Damaged in transit',date:'20 Jul'},
+    {item:'Garlic Mayo',qty:'1 kg',val:200,reason:'Expired',date:'18 Jul'},
+    {item:'French Fries',qty:'3 kg',val:360,reason:'Spoiled',date:'12 Jul'},
+  ],
+};
+
+// ── NAVIGATION ──
+const MAIN=['home','orders','finance','ops','more'];
+function nav(sc,sub){
+  S.screen=sc; S.sub=sub||null;
+  const isMain=MAIN.includes(sc);
+  MAIN.forEach(t=>{
+    const b=document.getElementById('nv-'+t);
+    if(b) b.classList.toggle('active',t===sc);
+  });
+  const fab=document.getElementById('fab');
+  const bn=document.getElementById('bn');
+  fab.style.display=(sc==='orders')?'flex':'none';
+  bn.style.display=isMain?'flex':'none';
+  if(!isMain){
+    // update nav active for sub-screens
+    const parent={
+      'new-order':'orders','order-detail':'orders','amend-order':'orders',
+      'reconcile-detail':'ops','reports':'more','notifications':'more','pnl':'finance'
+    }[sc];
+    if(parent){
+      const pb=document.getElementById('nv-'+parent);
+      if(pb) pb.classList.add('active');
+    }
+  }
+  render();
+  document.getElementById('cnt').scrollTop=0;
+}
+
+function goBack(){
+  const sc=S.screen;
+  if(sc==='new-order'||sc==='orders') nav('orders');
+  else if(sc==='amend-order'||sc==='order-detail') { S.cart=[]; nav('order-detail'); }
+  else if(sc==='reconcile-detail') nav('ops');
+  else if(sc==='pnl') nav('finance');
+  else nav('more');
+}
+
+// ── HEADER ──
+function renderHd(title,back){
+  const unread=S.notifs.filter(n=>!n.read).length;
+  const hd=document.getElementById('hd');
+  hd.innerHTML=back?`
+    <button class="hd-btn" onclick="goBack()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+    </button>
+    <span class="hd-title">${title}</span>
+  `:`
+    <span class="hd-brand">Sha Sha Shandaar<br>Shawarma</span>
+    <button class="hd-btn" onclick="nav('notifications')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      ${unread>0?'<span class="dot"></span>':''}
+    </button>
+  `;
+}
+
+// ── RENDER DISPATCH ──
+function render(){
+  const sc=S.screen;
+  const cnt=document.getElementById('cnt');
+  const titles={
+    'home':'Dashboard','orders':'My Orders','new-order':'New Order',
+    'order-detail':'Order Details','amend-order':'Amend Order',
+    'finance':'Finance','ops':'Operations',
+    'reconcile-detail':'Reconcile Order','reports':'Reports',
+    'notifications':'Notifications','pnl':'P&L Statement'
+  };
+  const backs=['new-order','order-detail','amend-order','reconcile-detail','reports','notifications','pnl'];
+  const amendTitle= sc==='amend-order' && S.amendOrderId ? `Amend #${S.amendOrderId}` : (titles[sc]||sc);
+  renderHd(amendTitle, backs.includes(sc));
+
+  const renders={
+    home:rHome,orders:rOrders,'new-order':rNewOrder,'order-detail':rOrderDetail,
+    'amend-order':rAmendOrder,finance:rFinance,ops:rOps,'reconcile-detail':rReconDetail,
+    reports:rReports,notifications:rNotifs,pnl:rPnL
+  };
+  cnt.innerHTML=(renders[sc]||rHome)();
+}
+
+// ── BADGE ──
+function bg(st,type){
+  const m={pending:['bg-pending','Pending'],fulfilled:['bg-fulfilled','Fulfilled'],
+    delivered:['bg-delivered','Delivered'],amended:['bg-amended','Amended'],
+    paid:['bg-paid','Paid'],unpaid:['bg-unpaid','Unpaid'],overdue:['bg-overdue','Overdue'],
+    failed:['bg-unpaid','Failed']};
+  const[cls,lbl]=m[st]||['bg-pending',st];
+  return`<span class="bge ${cls}">${lbl}</span>`;
+}
+
+// ── HOME ──
+function rHome(){
+  const unread=S.notifs.filter(n=>!n.read).length;
+  const pendAmt=S.pending.reduce((s,p)=>s+p.amt,0);
+  const lowStock=S.inv.filter(i=>i.stock>0&&i.stock/i.max<0.3).length;
+  const outStock=S.inv.filter(i=>i.stock===0).length;
+  return`<div class="sec">
+    <div style="margin-bottom:18px;">
+      <div style="font-size:12px;color:var(--muted);font-weight:500;">Good morning 👋</div>
+      <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:21px;margin-top:2px;">Rajesh Kumar</div>
+      <div style="font-size:12px;color:var(--muted);">Koramangala Outlet · 26 Jul 2026</div>
+    </div>
+    ${unread>0?`<div style="background:linear-gradient(135deg,var(--ember),#e74c3c);color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="nav('notifications')">
+      <span style="font-size:22px;">⚠️</span>
+      <div style="flex:1;"><div style="font-weight:700;font-size:14px;">${unread} alert${unread>1?'s':''} need attention</div><div style="font-size:12px;opacity:.85;margin-top:1px;">Tap to view</div></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+    </div>`:''}
+    <div class="sg">
+      <div class="sc" onclick="nav('orders')"><div class="sl">Orders This Month</div><div class="sv">${S.orders.length+19}</div><div class="ss up">↑ 12% vs last month</div></div>
+      <div class="sc" onclick="nav('finance')"><div class="sl">Pending Payments</div><div class="sv" style="color:var(--ember);">₹${(pendAmt/1000).toFixed(1)}K</div><div class="ss dn">${S.pending.length} invoice(s) due</div></div>
+    </div>
+    <div class="sg">
+      <div class="sc" onclick="nav('ops')"><div class="sl">Inventory Alerts</div><div class="sv" style="color:${lowStock+outStock>0?'#B45309':'var(--sage)'};">${lowStock+outStock}</div><div class="ss nt">${outStock} out, ${lowStock} low</div></div>
+      <div class="sc"><div class="sl">Month Spend</div><div class="sv">₹2.4L</div><div class="ss dn">↓ 5% vs June</div></div>
+    </div>
+    <div class="card">
+      <div class="cb">
+        <div class="sh"><span class="st">Weekly Spend</span><button class="sa" onclick="nav('reports')">Full Report</button></div>
+        <div class="chrt" style="height:90px;">
+          ${[55,68,45,82,60,91,75,68].map((h,i)=>`<div class="chrt-b" style="height:${h}%;background:${i%2?'rgba(232,168,56,.35)':'var(--sf)'}"></div>`).join('')}
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px;">
+          ${['W1','W2','W3','W4','W5','W6','W7','W8'].map(w=>`<span>${w}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="sh"><span class="st">Recent Orders</span><button class="sa" onclick="nav('orders')">See All</button></div>
+    <div class="card">
+      ${S.orders.slice(0,3).map(o=>`
+        <div class="or" onclick="selOrder('${o.id}')">
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--sf-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🥙</div>
+          <div class="oi"><div class="oid">#${o.id}</div><div class="om">${o.date} · ${o.items.length} items</div></div>
+          <div style="text-align:right;"><div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">₹${o.total.toLocaleString()}</div><div style="margin-top:4px;">${bg(o.status)}</div></div>
+        </div>`).join('')}
+    </div>
+    <div class="sh"><span class="st">Sales Trends</span><button class="sa" onclick="nav('reports')">Details</button></div>
+    <div class="card"><div class="cb">
+      ${[{n:'Chicken Shawarma Mix',p:100,t:'↑ 18%',up:true},{n:'Pita Bread',p:65,t:'↑ 5%',up:true},{n:'Garlic Mayo',p:45,t:'—'},{n:'French Fries',p:35,t:'↓ 8%',up:false}].map(r=>`
+        <div class="rb"><div class="rb-h"><span>${r.n}</span><span style="color:${r.t.includes('↑')?'var(--sage)':r.t.includes('↓')?'var(--ember)':'var(--muted)'}">${r.t}</span></div>
+        <div class="rb-t"><div class="rb-f" style="width:${r.p}%"></div></div></div>`).join('')}
+    </div></div>
+    <div style="height:8px;"></div>
+  </div>`;
+}
+
+// ── ORDERS LIST ──
+function rOrders(){
+  const f=S.oFilter;
+  const list=f==='all'?S.orders:S.orders.filter(o=>o.status===f);
+  return`<div class="sec">
+    <button class="btn btn-p btn-full" style="margin-bottom:14px;font-size:15px;padding:15px;" onclick="S.cart=[];S.catFilter='All';nav('new-order')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Place New Order
+    </button>
+    <div class="cr">
+      ${['all','pending','fulfilled','delivered','amended'].map(x=>`
+        <button class="chip ${f===x?'on':''}" onclick="S.oFilter='${x}';render()">${x.charAt(0).toUpperCase()+x.slice(1)}</button>`).join('')}
+    </div>
+    <div class="card">
+      ${list.length===0?`<div class="emp"><div class="em">📦</div>No ${f} orders yet</div>`:
+        list.map(o=>`
+          <div class="or" onclick="selOrder('${o.id}')">
+            <div style="width:42px;height:42px;border-radius:12px;background:var(--sf-dim);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🥙</div>
+            <div class="oi"><div class="oid">#${o.id}</div><div class="om">${o.date} · ${o.items.length} items</div>
+              <div style="display:flex;gap:5px;margin-top:4px;">${bg(o.status)} ${bg(o.pay)}</div></div>
+            <div><div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;text-align:right;">₹${o.total.toLocaleString()}</div>
+              <div style="text-align:right;margin-top:6px;color:var(--muted);">›</div></div>
+          </div>`).join('')}
+    </div>
+    <div style="height:8px;"></div>
+  </div>`;
+}
+
+function selOrder(id){S.selOrder=id;nav('order-detail');}
+
+// ── ORDER DETAIL ──
+function rOrderDetail(){
+  const o=S.orders.find(x=>x.id===S.selOrder);
+  if(!o) return`<div class="sec"><p>Not found</p></div>`;
+  return`<div class="sec">
+    <div class="card"><div class="cb">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div><div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:19px;">#${o.id}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">${o.date} · ${o.items.length} items</div></div>
+        <div style="text-align:right;">${bg(o.status)}<br><span style="display:inline-block;margin-top:5px;">${bg(o.pay)}</span></div>
+      </div>
+      <div class="dvd"></div>
+      ${o.items.map(i=>`
+        <div class="di">
+          <div><div style="font-size:14px;font-weight:600;">${i.name}</div><div style="font-size:12px;color:var(--muted);">${i.qty} ${i.unit} · ₹${i.price}/${i.unit}</div></div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">₹${i.total.toLocaleString()}</div>
+        </div>`).join('')}
+      <div class="dvd"></div>
+      <div class="sr"><span style="color:var(--muted)">Subtotal</span><span>₹${o.subtotal.toLocaleString()}</span></div>
+      <div class="sr"><span style="color:var(--muted)">GST (5%)</span><span>₹${o.gst.toLocaleString()}</span></div>
+      <div class="sr tot"><span>Total</span><span>₹${o.total.toLocaleString()}</span></div>
+    </div></div>
+
+    <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;margin-bottom:10px;">Actions</div>
+    ${o.status==='fulfilled'?`<button class="btn btn-g btn-full" style="margin-bottom:10px;" onclick="openDeliverSheet('${o.id}')">✓ Mark as Delivered</button>`:''}
+    ${o.status==='delivered'&&o.ri?`<div style="background:${o.ri.some(r=>!r.ok)?'var(--ember-dim)':'var(--sage-dim)'};border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:700;color:${o.ri.some(r=>!r.ok)?'var(--ember)':'var(--sage)'};">
+        ${o.ri.some(r=>!r.ok)?`⚠️ ${o.ri.filter(r=>!r.ok).length} discrepancy/ies found`:'✓ All quantities matched'}
+      </div>
+      ${o.ri.filter(r=>!r.ok).map(r=>`<div style="font-size:12px;color:var(--ember);margin-top:4px;">${r.n}: ordered ${r.ord}, got ${r.got} (${r.diff})</div>`).join('')}
+    </div>`:''}
+    ${(o.pay==='unpaid'||o.pay==='overdue')?`<button class="btn btn-p btn-full" style="margin-bottom:10px;" onclick="openPaySheet('${o.id}')">💳 Pay ₹${o.total.toLocaleString()}</button>`:''}
+    ${(o.status==='pending'||o.status==='fulfilled')?`<button class="btn btn-s btn-full" style="margin-bottom:10px;" onclick="openAmendOrder('${o.id}')">✏️ Request Amendment</button>`:''}
+    <button class="btn btn-s btn-full" style="margin-bottom:10px;" onclick="toast('📄 Invoice downloaded')">📄 Download Invoice</button>
+    <div style="height:8px;"></div>
+  </div>`;
+}
+
+// ── NEW ORDER ──
+function rNewOrder(){
+  const cf=S.catFilter||'All';
+  const cats=['All','Meat','Bread','Sauce','Dips','Sides'];
+  const items=cf==='All'?catalog:catalog.filter(c=>c.cat===cf);
+  const cartTotal=Math.round(S.cart.reduce((s,c)=>s+c.qty*c.price,0)*1.05);
+  const cartQty=S.cart.reduce((s,c)=>s+c.qty,0);
+  const suggs=[];
+  S.cart.forEach(ci=>{
+    const rs=recipes[ci.id];
+    if(rs) rs.forEach(r=>{
+      if(!S.cart.find(x=>x.id===r.id)&&!suggs.find(x=>x.id===r.id)){
+        const ci2=catalog.find(c=>c.id===r.id);
+        if(ci2) suggs.push({...r,name:ci2.name,price:ci2.price,unit:ci2.unit,em:ci2.em});
+      }
+    });
+  });
+  return`<div class="sec">
+    <div class="cr">
+      ${cats.map(c=>`<button class="chip ${cf===c?'on':''}" onclick="S.catFilter='${c}';render()">${c}</button>`).join('')}
+    </div>
+    ${suggs.length>0?`
+      <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:#B45309;margin-bottom:8px;">💡 Recipe Suggestions</div>
+      ${suggs.map(s=>`
+        <div class="sug">
+          <div style="font-size:22px;">${s.em}</div>
+          <div style="flex:1;font-size:13px;">
+            <span class="sug-tag">RECIPE</span><br>
+            <strong>${s.name}</strong> · ₹${s.price}/${s.unit}<br>
+            <span style="font-size:11.5px;color:var(--muted);">${s.label}</span>
+          </div>
+          <button class="btn btn-p btn-sm" onclick="addToCart('${s.id}')">+ Add</button>
+        </div>`).join('')}`:''}
+    <div class="card">
+      ${items.map(it=>{
+        const ci=S.cart.find(c=>c.id===it.id);
+        const qty=ci?ci.qty:0;
+        return`<div class="ci">
+          <div class="cic">${it.em}</div>
+          <div style="flex:1;"><div class="cn">${it.name}</div><div class="cp">₹${it.price} / ${it.unit}</div></div>
+          <div class="qc">
+            <button class="qb minus" onclick="changeQty('${it.id}',-1)" style="${qty===0?'opacity:.25;pointer-events:none;':''}">−</button>
+            <span class="qv" style="${qty>0?'color:var(--sf);':'color:var(--muted);'}">${qty}</span>
+            <button class="qb plus" onclick="changeQty('${it.id}',1)">+</button>
+          </div>
+        </div>`;}).join('')}
+    </div>
+    <div style="height:${cartQty>0?90:20}px;"></div>
+    ${cartQty>0?`<div style="position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:var(--wh);border-top:1px solid var(--bdr);z-index:10;">
+      <button class="btn btn-p btn-full" onclick="openConfirm()">
+        <span style="background:var(--coal);color:var(--sf);width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">${cartQty}</span>
+        Review · ₹${cartTotal.toLocaleString()}
+      </button>
+    </div>`:''}
+  </div>`;
+}
+
+function addToCart(id){
+  const it=catalog.find(c=>c.id===id);
+  if(!it)return;
+  if(!S.cart.find(c=>c.id===id)) S.cart.push({id,name:it.name,qty:1,unit:it.unit,price:it.price});
+  render();
+}
+function changeQty(id,d){
+  const i=S.cart.findIndex(c=>c.id===id);
+  if(i===-1){addToCart(id);return;}
+  S.cart[i].qty=Math.max(0,S.cart[i].qty+d);
+  if(S.cart[i].qty===0) S.cart.splice(i,1);
+  render();
+}
+function openConfirm(){
+  const sub=S.cart.reduce((s,c)=>s+c.qty*c.price,0);
+  const gst=Math.round(sub*.05);
+  document.getElementById('sh-confirm-body').innerHTML=`
+    ${S.cart.map(c=>`<div class="sr"><span>${c.name} × ${c.qty} ${c.unit}</span><span>₹${(c.qty*c.price).toLocaleString()}</span></div>`).join('')}
+    <div class="sr"><span style="color:var(--muted)">GST (5%)</span><span>₹${gst.toLocaleString()}</span></div>
+    <div class="sr tot"><span>Total</span><span>₹${(sub+gst).toLocaleString()}</span></div>`;
+  ops('sh-confirm');
+}
+function doPlaceOrder(){
+  const sub=S.cart.reduce((s,c)=>s+c.qty*c.price,0);
+  const gst=Math.round(sub*.05);
+  const newO={
+    id:'ORD-'+(1043+S.orders.length),date:'26 Jul 2026',
+    items:S.cart.map(c=>({name:c.name,qty:c.qty,unit:c.unit,price:c.price,total:c.qty*c.price})),
+    subtotal:sub,gst,total:sub+gst,status:'pending',pay:'unpaid'
+  };
+  S.orders.unshift(newO);
+  S.cart=[];S.catFilter='All';
+  cls('sh-confirm');
+  nav('orders');
+  setTimeout(()=>toast('✅ Order placed — #'+newO.id),200);
+}
+
+// ── FINANCE ──
+function rFinance(){
+  const t=S.finTab;
+  return`<div class="sec">
+    <div class="cr">
+      <button class="chip ${t==='payments'?'on':''}" onclick="S.finTab='payments';render()">Payments</button>
+      <button class="chip ${t==='invoices'?'on':''}" onclick="S.finTab='invoices';render()">Invoices</button>
+      <button class="chip" onclick="nav('pnl')">P&L →</button>
+    </div>
+    ${t==='payments'?rPayments():rInvoices()}
+  </div>`;
+}
+
+function rPayments(){
+  return`
+    ${S.pending.length>0?`
+      <div class="st" style="margin-bottom:10px;">Due Now</div>
+      ${S.pending.map(p=>`
+        <div class="pay-card ${p.st==='overdue'?'ov':''}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div><div style="font-weight:700;font-size:14px;">#${p.inv}</div>
+              <div style="font-size:12px;color:var(--muted);">Order #${p.oid} · Due ${p.due}</div></div>
+            ${bg(p.st)}
+          </div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:24px;margin-bottom:12px;">₹${p.amt.toLocaleString()}</div>
+          <button class="btn btn-p btn-full" onclick="openPaySheet('${p.oid}','${p.id}')">Pay Now</button>
+        </div>`).join('')}`:`<div class="card"><div class="emp"><div class="em">🎉</div>No pending payments!</div></div>`}
+    <div class="st" style="margin:4px 0 10px;">Payment History</div>
+    <div class="card">
+      ${S.phist.map(p=>`
+        <div style="padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:${p.st==='paid'?'var(--sage-dim)':'var(--ember-dim)'};display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${p.st==='paid'?'✓':'✗'}</div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:13.5px;">#${p.inv}</div>
+            <div style="font-size:12px;color:var(--muted);">${p.method} · ${p.date}</div></div>
+          <div style="text-align:right;"><div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">₹${p.amt.toLocaleString()}</div>
+            ${bg(p.st==='paid'?'paid':'failed')}</div>
+        </div>`).join('')}
+    </div>
+    <div style="height:8px;"></div>`;
+}
+
+function rInvoices(){
+  const invs=[
+    {id:'INV-0985',oid:'ORD-1038',date:'12 Jul',amt:4011,st:'unpaid'},
+    {id:'INV-0983',oid:'ORD-1041',date:'22 Jul',amt:6395,st:'overdue'},
+    {id:'INV-0982',oid:'ORD-1042',date:'25 Jul',amt:7928,st:'paid'},
+    {id:'INV-0979-R',oid:'ORD-1040',date:'20 Jul',amt:2730,st:'paid',rev:true},
+    {id:'INV-0979',oid:'ORD-1040',date:'19 Jul',amt:2730,st:'paid'},
+    {id:'INV-0976',oid:'ORD-1039',date:'16 Jul',amt:11445,st:'paid'},
+  ];
+  return`<div class="card">
+    ${invs.map(inv=>`
+      <div style="padding:13px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--sky-dim);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📄</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:13.5px;">#${inv.id} ${inv.rev?'<span style="font-size:9px;background:var(--sf-dim);color:#B45309;padding:1px 6px;border-radius:4px;font-weight:700;">REVISED</span>':''}</div>
+          <div style="font-size:12px;color:var(--muted);">Order #${inv.oid} · ${inv.date}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">₹${inv.amt.toLocaleString()}</div>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end;margin-top:4px;">
+            ${bg(inv.st)}
+            <button style="background:none;border:none;cursor:pointer;color:var(--sky);font-size:18px;padding:0;line-height:1;" onclick="toast('Invoice #${inv.id} downloaded')">⬇</button>
+          </div>
+        </div>
+      </div>`).join('')}
+  </div><div style="height:8px;"></div>`;
+}
+
+function openPaySheet(oid,pid){
+  const o=S.orders.find(x=>x.id===oid);
+  S.selOrder=oid; S.selPay=pid;
+  document.getElementById('sh-pay-amt').innerHTML=`
+    <div style="background:var(--sf-dim);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Amount Due</div>
+      <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:28px;margin-top:4px;">₹${o?o.total.toLocaleString():'—'}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Order #${oid}</div>
+    </div>`;
+  document.getElementById('pay-go-btn').onclick=()=>doPay(oid,pid);
+  ops('sh-pay');
+}
+function doPay(oid,pid){
+  const o=S.orders.find(x=>x.id===oid);
+  if(o) o.pay='paid';
+  if(pid){
+    const i=S.pending.findIndex(p=>p.id===pid);
+    if(i!==-1){
+      const p=S.pending.splice(i,1)[0];
+      S.phist.unshift({inv:p.inv,oid:p.oid,amt:p.amt,method:'UPI',date:'26 Jul 2026',st:'paid'});
+    }
+  }
+  cls('sh-pay');render();
+  setTimeout(()=>toast('💳 Payment successful!'),100);
+}
+
+// ── P&L ──
+function rPnL(){
+  return`<div class="sec">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
+      <select class="fi" style="flex:1;" onchange="toast('Loading '+this.value+' data...')"><option>July 2026</option><option>June 2026</option><option>May 2026</option></select>
+      <div style="font-size:11px;color:var(--sage);font-weight:600;white-space:nowrap;">Petpooja ✓</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1e8449,var(--sage));color:#fff;border-radius:16px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:11px;opacity:.8;font-weight:700;text-transform:uppercase;letter-spacing:.07em;">Net Profit · July 2026</div>
+      <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:34px;margin:6px 0;">₹2,25,000</div>
+      <div style="font-size:13px;opacity:.9;">Margin: 32.6% · ↑ 2.1% vs June</div>
+    </div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Food Cost %</div><div class="sv">34.8%</div><div class="ss up">↓ 1.2% vs Jun</div></div>
+      <div class="sc"><div class="sl">Wastage %</div><div class="sv" style="color:var(--ember);">1.7%</div><div class="ss dn">↑ 0.3% vs Jun</div></div>
+    </div>
+    <div class="card"><div class="cb">
+      <div class="st" style="margin-bottom:10px;">Revenue</div>
+      <div class="prow ph"><span>Source</span><span>Amount</span></div>
+      <div class="prow"><span>Dine-in</span><span class="pos">₹3,85,000</span></div>
+      <div class="prow"><span>Delivery (Swiggy/Zomato)</span><span class="pos">₹2,10,000</span></div>
+      <div class="prow"><span>Takeaway</span><span class="pos">₹95,000</span></div>
+      <div class="prow ph"><span>Total Revenue</span><span class="pos">₹6,90,000</span></div>
+    </div></div>
+    <div class="card"><div class="cb">
+      <div class="st" style="margin-bottom:10px;">Expenses</div>
+      <div class="prow ph"><span>Category</span><span>Amount</span></div>
+      <div class="prow"><span>Raw Materials (Orders)</span><span class="neg">₹2,40,000</span></div>
+      <div class="prow"><span>Staff Salaries</span><span class="neg">₹1,20,000</span></div>
+      <div class="prow"><span>Rent & Utilities</span><span class="neg">₹65,000</span></div>
+      <div class="prow"><span>Packaging</span><span class="neg">₹28,000</span></div>
+      <div class="prow"><span>Wastage</span><span class="neg">₹12,000</span></div>
+      <div class="prow ph"><span>Total Expenses</span><span class="neg">₹4,65,000</span></div>
+    </div></div>
+    <div class="card"><div class="cb">
+      <div class="st" style="margin-bottom:12px;">Cost Breakdown</div>
+      ${[{l:'Raw Materials',p:52,c:'var(--ember)'},{l:'Staff',p:26,c:'var(--sf)'},{l:'Rent & Utilities',p:14,c:'var(--sky)'},{l:'Packaging & Other',p:8,c:'var(--sage)'}].map(b=>`
+        <div class="pr-r"><div class="pr-l"><span>${b.l}</span><span style="font-weight:700;">${b.p}%</span></div>
+        <div class="pr-t"><div class="pr-f" style="width:${b.p}%;background:${b.c};"></div></div></div>`).join('')}
+    </div></div>
+    <div style="height:8px;"></div>
+  </div>`;
+}
+
+// ── OPS ──
+function rOps(){
+  const t=S.opsTab;
+  return`<div class="sec">
+    <div class="cr">
+      <button class="chip ${t==='inventory'?'on':''}" onclick="S.opsTab='inventory';render()">Inventory</button>
+      <button class="chip ${t==='reconcile'?'on':''}" onclick="S.opsTab='reconcile';render()">Reconcile</button>
+      <button class="chip ${t==='wastage'?'on':''}" onclick="S.opsTab='wastage';render()">Wastage</button>
+      <button class="chip ${t==='expenses'?'on':''}" onclick="S.opsTab='expenses';render()">Expenses</button>
+    </div>
+    ${t==='inventory'?rInv():t==='reconcile'?rReconList():t==='wastage'?rWaste():rExpenses()}
+  </div>`;
+}
+
+function rInv(){
+  const alerts=S.inv.filter(i=>i.stock/i.max<0.3);
+  return`
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Items</div><div class="sv">${S.inv.length}</div></div>
+      <div class="sc" style="border-color:var(--ember)"><div class="sl">Need Attention</div><div class="sv" style="color:var(--ember);">${alerts.length}</div><div class="ss nt">${S.inv.filter(i=>i.stock===0).length} out of stock</div></div>
+    </div>
+    <div class="card">
+      ${S.inv.map(it=>{
+        const p=Math.max(0,Math.min(100,Math.round(it.stock/it.max*100)));
+        const bc=p===0?'var(--ember)':p<30?'var(--sf)':'var(--sage)';
+        const scls=p===0?'ou-s':p<30?'lo-s':'in-s';
+        const stxt=p===0?'Out of Stock':p<30?'Low Stock':'In Stock';
+        return`<div class="ii">
+          <div style="font-size:22px;flex-shrink:0;">${it.em}</div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:14px;">${it.name}</div>
+            <div style="font-size:12px;color:var(--muted);">${it.stock} ${it.unit} · Last ordered ${it.last}</div>
+            <div class="ibw"><div class="ib" style="width:${p}%;background:${bc};"></div></div></div>
+          <span class="ist ${scls}">${stxt}</span>
+        </div>`;}).join('')}
+    </div>`;
+}
+
+function rReconList(){
+  const todo=S.orders.filter(o=>o.status==='delivered'&&!o.reconciled&&o.ri);
+  const done=S.orders.filter(o=>o.reconciled);
+  return`
+    ${todo.length===0?`<div class="card"><div class="emp"><div class="em">✅</div>All deliveries reconciled!</div></div>`:`
+      <div class="st" style="margin-bottom:10px;">Needs Reconciliation</div>
+      <div class="card">
+        ${todo.map(o=>`
+          <div class="or" onclick="S.selOrder='${o.id}';nav('reconcile-detail')">
+            <div style="font-size:24px;">⚖️</div>
+            <div class="oi"><div class="oid">#${o.id}</div><div class="om">${o.date} · ${o.items.length} items</div></div>
+            <span style="color:var(--muted);">›</span>
+          </div>`).join('')}
+      </div>`}
+    ${done.length>0?`
+      <div class="st" style="margin-top:4px;margin-bottom:10px;">Completed</div>
+      <div class="card">
+        ${done.map(o=>`
+          <div class="or" style="cursor:default;">
+            <div style="font-size:24px;">✅</div>
+            <div class="oi"><div class="oid">#${o.id}</div><div class="om">${o.date} · Reconciled</div></div>
+          </div>`).join('')}
+      </div>`:''}`;
+}
+
+function rReconDetail(){
+  const o=S.orders.find(x=>x.id===S.selOrder);
+  if(!o||!o.ri) return`<div class="sec"><p>No reconcile data.</p></div>`;
+  const flags=S.recFlags[o.id]||{};
+  return`<div class="sec">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Tap ⚑ to flag discrepancies, ✓ to mark as OK.</p>
+    <div class="card" style="margin-bottom:14px;">
+      <div style="padding:10px 16px;background:var(--cream);border-bottom:1px solid var(--bdr);display:grid;grid-template-columns:1fr auto;gap:8px;">
+        <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Item</span>
+        <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Status</span>
+      </div>
+      ${o.ri.map((it,idx)=>`
+        <div class="rci" style="${!it.ok?'background:rgba(194,59,34,.04);':''}">
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:14px;">${it.n}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+              Ordered: <b>${it.ord}</b> · Got: <b style="color:${it.ok?'var(--sage)':'var(--ember)'}">${it.got}</b>
+              ${!it.ok?`<span style="color:var(--ember);font-weight:700;"> (${it.diff})</span>`:''}
+            </div>
+          </div>
+          ${it.ok?`<button class="rcb ok">✓</button>`:`
+            <button class="rcb ${flags[idx]==='ok'?'ok':'fl'}" onclick="toggleFlag('${o.id}',${idx})">
+              ${flags[idx]==='ok'?'✓':'⚑'}
+            </button>`}
+        </div>`).join('')}
+    </div>
+    <button class="btn btn-p btn-full" style="margin-bottom:10px;" onclick="doRecon()">Submit Reconciliation</button>
+    <button class="btn btn-d btn-full" onclick="doFlagRecon()">⚑ Flag Discrepancy to Admin</button>
+    <div style="height:8px;"></div>
+  </div>`;
+}
+function toggleFlag(oid,idx){
+  if(!S.recFlags[oid]) S.recFlags[oid]={};
+  S.recFlags[oid][idx]=S.recFlags[oid][idx]==='ok'?'flag':'ok';
+  render();
+}
+function doRecon(){
+  const o=S.orders.find(x=>x.id===S.selOrder);
+  if(o) o.reconciled=true;
+  nav('ops');
+  setTimeout(()=>toast('✅ Reconciliation submitted'),200);
+}
+function doFlagRecon(){
+  nav('ops');
+  setTimeout(()=>toast('⚑ Discrepancy flagged — admin notified'),200);
+}
+
+function rWaste(){
+  const total=S.waste.reduce((s,w)=>s+w.val,0);
+  return`
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Wastage</div><div class="sv" style="color:var(--ember);">₹${total.toLocaleString()}</div><div class="ss nt">This month</div></div>
+      <div class="sc"><div class="sl">Wastage %</div><div class="sv">1.7%</div><div class="ss dn">↑ 0.3% vs Jun</div></div>
+    </div>
+    <button class="btn btn-p btn-full" style="margin-bottom:14px;" onclick="ops('sh-waste')">+ Log Wastage</button>
+    <div class="st" style="margin-bottom:10px;">Wastage Log</div>
+    <div class="card">
+      ${S.waste.map(w=>`
+        <div class="wi">
+          <div style="font-size:22px;">🗑️</div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:14px;">${w.item}</div>
+            <div style="font-size:12px;color:var(--muted);">${w.qty} · ${w.reason} · ${w.date}</div></div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--ember);">₹${w.val.toLocaleString()}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ── EXPENSES ──
+const EXP_CATS=[
+  {name:'Rent & Utilities',icon:'🏠',color:'#6366f1'},
+  {name:'Staff / Labour',icon:'👥',color:'#0ea5e9'},
+  {name:'Transport',icon:'🚗',color:'#f59e0b'},
+  {name:'Packaging',icon:'📦',color:'#10b981'},
+  {name:'Marketing',icon:'📱',color:'#ec4899'},
+  {name:'Equipment Repair',icon:'🛠️',color:'#ef4444'},
+  {name:'Cleaning',icon:'🧹',color:'#14b8a6'},
+  {name:'Licensing',icon:'📝',color:'#8b5cf6'},
+  {name:'Miscellaneous',icon:'💼',color:'#6b7280'},
+];
+
+function rExpenses(){
+  const cf=S.expCatFilter||'All';
+  const list=cf==='All'?S.expenses:S.expenses.filter(e=>e.cat===cf);
+  const total=S.expenses.reduce((s,e)=>s+e.amt,0);
+  const biggest=EXP_CATS.map(c=>({...c,amt:S.expenses.filter(e=>e.cat===c.name).reduce((s,e)=>s+e.amt,0)}))
+    .filter(c=>c.amt>0).sort((a,b)=>b.amt-a.amt);
+  const maxAmt=biggest[0]?.amt||1;
+
+  return`
+    <!-- Stats -->
+    <div class="sg">
+      <div class="sc"><div class="sl">Total This Month</div><div class="sv">₹${(total/1000).toFixed(1)}K</div><div class="ss nt">${S.expenses.length} entries</div></div>
+      <div class="sc"><div class="sl">Biggest Category</div>
+        <div style="font-size:18px;margin-bottom:2px;">${biggest[0]?.icon||'—'}</div>
+        <div style="font-weight:700;font-size:13px;line-height:1.2;">${biggest[0]?.name||'—'}</div>
+        <div class="ss nt">₹${(biggest[0]?.amt||0).toLocaleString()}</div>
+      </div>
+    </div>
+
+    <!-- Category breakdown -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="cb">
+        <div class="sh" style="margin-bottom:12px;">
+          <span class="st">By Category</span>
+          <button class="btn btn-s btn-sm" onclick="toast('CSV exported!')">Export ↓</button>
+        </div>
+        ${biggest.map(c=>`
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+              <div style="display:flex;align-items:center;gap:7px;cursor:pointer;" onclick="S.expCatFilter=S.expCatFilter==='${c.name}'?'All':'${c.name}';render()">
+                <span style="font-size:16px;">${c.icon}</span>
+                <span style="font-size:13px;font-weight:600;">${c.name}</span>
+                ${cf===c.name?'<span style="font-size:10px;background:var(--sf);color:var(--coal);padding:1px 6px;border-radius:5px;font-weight:700;">filtered</span>':''}
+              </div>
+              <span style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13.5px;">₹${c.amt.toLocaleString()}</span>
+            </div>
+            <div style="height:6px;background:var(--bdr);border-radius:3px;">
+              <div style="height:100%;border-radius:3px;background:${c.color};width:${Math.round(c.amt/maxAmt*100)}%;transition:width .3s;"></div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Add button + filter chips -->
+    <button class="btn btn-p btn-full" style="margin-bottom:14px;" onclick="ops('sh-expense')">+ Add Expense</button>
+
+    <div class="sh"><span class="st">${cf==='All'?'All Expenses':`${cf}`}</span>
+      ${cf!=='All'?`<button class="sa" onclick="S.expCatFilter='All';render()">Clear filter ×</button>`:''}
+    </div>
+    <div class="cr" style="margin-bottom:14px;">
+      ${EXP_CATS.filter(c=>S.expenses.some(e=>e.cat===c.name)).map(c=>`
+        <button class="chip ${cf===c.name?'on':''}" onclick="S.expCatFilter=S.expCatFilter==='${c.name}'?'All':'${c.name}';render()">${c.icon} ${c.name}</button>`).join('')}
+    </div>
+
+    <!-- Expense list -->
+    <div class="card">
+      ${list.length===0?`<div class="emp"><div class="em">💸</div>No expenses in this category</div>`
+        :list.map(e=>{
+          const cat=EXP_CATS.find(c=>c.name===e.cat)||{color:'#999',icon:'💼'};
+          return`<div style="padding:13px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;">
+            <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:${cat.color}18;">
+              ${cat.icon}
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:14px;">${e.cat}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:1px;">${e.notes}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">📅 ${e.date}</div>
+            </div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:var(--ember);">₹${e.amt.toLocaleString()}</div>
+          </div>`;}).join('')}
+    </div>
+  `;
+}
+
+function doExpense(){
+  const cat=document.getElementById('exp-cat')?.value||'Miscellaneous';
+  const amt=parseFloat(document.getElementById('exp-amt')?.value||0);
+  const date=document.getElementById('exp-date')?.value||'2026-07-26';
+  const notes=document.getElementById('exp-notes')?.value||'';
+  if(!amt||amt<=0){toast('⚠️ Enter a valid amount');return;}
+  const catData=EXP_CATS.find(c=>c.name===cat)||{icon:'💼'};
+  const fmt=new Date(date).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}).replace(/-/g,' ');
+  S.expenses.unshift({id:'e'+Date.now(),cat,icon:catData.icon,amt,date:fmt||date,notes});
+  cls('sh-expense');render();
+  setTimeout(()=>toast(`💸 Expense logged — ₹${amt.toLocaleString()}`),100);
+}
+
+// ── MORE ──
+function rMore(){
+  const unread=S.notifs.filter(n=>!n.read).length;
+  return`<div class="sec">
+    <div class="card" style="margin-bottom:14px;"><div class="cb" style="display:flex;align-items:center;gap:14px;">
+      <div style="width:50px;height:50px;border-radius:16px;background:var(--sf);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;color:var(--coal);">RK</div>
+      <div><div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;">Rajesh Kumar</div>
+        <div style="font-size:12.5px;color:var(--muted);">Koramangala Outlet · Franchise Owner</div></div>
+    </div></div>
+    <div class="card">
+      <div class="more-row" onclick="nav('reports')">
+        <div class="more-ico">📊</div>
+        <div style="flex:1;"><div style="font-weight:600;font-size:14px;">Reports & Analytics</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Item, month & outlet views</div></div>
+        <span style="color:var(--muted);">›</span>
+      </div>
+      <div class="more-row" onclick="nav('notifications')">
+        <div class="more-ico">🔔</div>
+        <div style="flex:1;"><div style="font-weight:600;font-size:14px;">Notifications ${unread>0?`<span style="background:var(--ember);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;">${unread}</span>`:''}</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Alerts and updates</div></div>
+        <span style="color:var(--muted);">›</span>
+      </div>
+      <div class="more-row" onclick="nav('pnl')">
+        <div class="more-ico">📈</div>
+        <div style="flex:1;"><div style="font-weight:600;font-size:14px;">P&L Statement</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Profit & loss (Petpooja POS)</div></div>
+        <span style="color:var(--muted);">›</span>
+      </div>
+      <div class="more-row" onclick="toast('Signed out')">
+        <div class="more-ico" style="background:var(--ember-dim);">🚪</div>
+        <div style="flex:1;"><div style="font-weight:600;font-size:14px;color:var(--ember);">Sign Out</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:20px;line-height:1.8;">
+      Sha Sha Shandaar Shawarma Portal v2.1<br>Last synced: 26 Jul 2026, 2:00 PM
+    </div>
+  </div>`;
+}
+
+// ── REPORTS ──
+function rReports(){
+  const t=S.rptTab;
+  return`<div class="sec">
+    <div class="cr">
+      <button class="chip ${t==='item'?'on':''}" onclick="S.rptTab='item';render()">Item-wise</button>
+      <button class="chip ${t==='month'?'on':''}" onclick="S.rptTab='month';render()">Month-wise</button>
+      <button class="chip ${t==='outlet'?'on':''}" onclick="S.rptTab='outlet';render()">Outlet</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <select class="fi" style="width:auto;" onchange="toast('Filtered by '+this.value)">
+        <option>July 2026</option><option>June 2026</option><option>Q2 2026</option>
+      </select>
+      <button class="btn btn-s btn-sm" onclick="toast('CSV exported!')">Export CSV ↓</button>
+    </div>
+    ${t==='item'?`<div class="card"><div class="cb"><div class="st" style="margin-bottom:10px;">Top Items by Spend</div>
+      ${[{n:'Chicken Shawarma Mix',s:'₹36,000',p:100,q:'120 kg'},{n:'Pita Bread',s:'₹12,000',p:33,q:'800 units'},{n:'Garlic Mayo',s:'₹8,000',p:22,q:'40 kg'},{n:'French Fries',s:'₹7,200',p:20,q:'60 kg'},{n:'Peri Peri Sauce',s:'₹5,400',p:15,q:'18 kg'},{n:'Hummus',s:'₹4,200',p:12,q:'12 kg'}].map(r=>`
+        <div class="rb"><div class="rb-h"><div><span style="font-weight:700;">${r.n}</span><br><span style="font-size:11px;color:var(--muted);">${r.q}</span></div><span style="font-family:'Poppins',sans-serif;font-weight:700;">${r.s}</span></div>
+        <div class="rb-t"><div class="rb-f" style="width:${r.p}%"></div></div></div>`).join('')}
+    </div></div>`:t==='month'?`
+      <div class="card"><div class="cb"><div class="st" style="margin-bottom:10px;">Monthly Spend</div>
+        <div class="chrt" style="height:100px;">
+          ${[{h:55,m:'Feb'},{h:68,m:'Mar'},{h:48,m:'Apr'},{h:82,m:'May'},{h:91,m:'Jun'},{h:75,m:'Jul'}].map(b=>`
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+              <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                <div style="width:100%;height:${b.h}%;background:var(--sf);border-radius:4px 4px 0 0;"></div></div>
+              <span style="font-size:10px;color:var(--muted);">${b.m}</span></div>`).join('')}
+        </div>
+        <div class="dvd"></div>
+        ${[{m:'Jul 2026',s:'₹2,40,000',n:24},{m:'Jun 2026',s:'₹2,52,000',n:22},{m:'May 2026',s:'₹1,98,000',n:19},{m:'Apr 2026',s:'₹1,74,000',n:18}].map(r=>`
+          <div class="prow"><span>${r.m} (${r.n} orders)</span><span style="font-weight:700;">${r.s}</span></div>`).join('')}
+      </div></div>`:`
+      <div class="card"><div class="cb"><div class="st" style="margin-bottom:10px;">Outlet Comparison</div>
+        ${[{n:'Koramangala (You) 🏆',s:'₹2,40,000',p:100},{n:'Indiranagar',s:'₹2,10,000',p:88},{n:'HSR Layout',s:'₹1,85,000',p:77},{n:'Whitefield',s:'₹1,42,000',p:59}].map((r,i)=>`
+          <div class="rb"><div class="rb-h"><span>${r.n}</span><span style="font-weight:700;">${r.s}</span></div>
+          <div class="rb-t"><div class="rb-f" style="width:${r.p}%;background:${i===0?'var(--sf)':'var(--bdr)'}; border:${i>0?'1px solid #ccc':'none'}"></div></div></div>`).join('')}
+      </div></div>`}
+    <div style="height:8px;"></div>
+  </div>`;
+}
+
+// ── NOTIFICATIONS ──
+function rNotifs(){
+  S.notifs.forEach(n=>n.read=true);
+  return`<div class="sec">
+    <div class="card">
+      ${S.notifs.map(n=>`
+        <div class="ni ${!n.read?'unr':''}">
+          <span class="ndot nd-${n.type}" style="margin-top:5px;flex-shrink:0;"></span>
+          <div style="flex:1;">
+            <div style="font-size:13.5px;line-height:1.5;">${n.txt}</div>
+            ${n.action==='pay'?`<button class="btn btn-p btn-sm" style="margin-top:8px;" onclick="nav('finance')">Pay Now →</button>`:''}
+            ${n.action==='recon'?`<button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="S.selOrder='ORD-1042';nav('reconcile-detail')">Reconcile →</button>`:''}
+            <div style="font-size:11px;color:var(--muted);margin-top:5px;">${n.time}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── DELIVER SHEET (dynamic) ──
+function openDeliverSheet(oid){
+  const o=S.orders.find(x=>x.id===oid);
+  if(!o) return;
+  S.selOrder=oid;
+  document.getElementById('sh-deliver-body').innerHTML=`
+    <div class="bsh"></div>
+    <div class="bst">Confirm Delivery</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Enter quantities actually received. Any differences are flagged automatically.</p>
+    <div style="display:grid;grid-template-columns:1fr auto auto;gap:0;margin-bottom:4px;padding:0 2px;">
+      <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Item</span>
+      <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;margin-right:10px;">Ordered</span>
+      <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;">Received</span>
+    </div>
+    <div class="card" style="margin-bottom:14px;">
+      ${o.items.map((item,idx)=>`
+        <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--bdr);" id="recv-row-${idx}">
+          <div>
+            <div style="font-weight:600;font-size:13.5px;">${item.name}</div>
+            <div style="font-size:11.5px;color:var(--muted);">₹${item.price}/${item.unit}</div>
+          </div>
+          <span style="font-size:13px;color:var(--muted);white-space:nowrap;margin-right:6px;">${item.qty} ${item.unit}</span>
+          <input type="number" id="recv-${idx}" value="${item.qty}" min="0" step="${item.unit==='units'?1:0.5}"
+            style="width:72px;padding:7px 9px;border:1.5px solid var(--bdr);border-radius:9px;font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;text-align:center;color:var(--coal);"
+            oninput="highlightRecvRow(${idx},${item.qty},this.value,'${item.unit}')">
+        </div>`).join('')}
+    </div>
+    <div class="fg"><label class="fl">Delivery Date</label><input type="date" class="fi" id="del-dt" value="2026-07-26"></div>
+    <button class="btn btn-g btn-full" onclick="doDeliver()">Confirm Delivery & Reconcile</button>
+  `;
+  ops('sh-deliver');
+}
+
+function highlightRecvRow(idx,ordered,received,unit){
+  const row=document.getElementById('recv-row-'+idx);
+  const inp=document.getElementById('recv-'+idx);
+  const diff=parseFloat(received)-parseFloat(ordered);
+  if(!row||!inp) return;
+  if(Math.abs(diff)<0.01){
+    row.style.background='';
+    inp.style.borderColor='var(--bdr)';
+  } else {
+    row.style.background=diff<0?'rgba(194,59,34,.05)':'rgba(39,174,96,.05)';
+    inp.style.borderColor=diff<0?'var(--ember)':'var(--sage)';
+  }
+}
+
+function doDeliver(){
+  const o=S.orders.find(x=>x.id===S.selOrder);
+  if(!o) return;
+  o.status='delivered';
+  // Build reconciliation from inputs
+  o.ri=o.items.map((item,idx)=>{
+    const inp=document.getElementById('recv-'+idx);
+    const got=inp?parseFloat(inp.value)||item.qty:item.qty;
+    const diff=got-item.qty;
+    const ok=Math.abs(diff)<0.01;
+    return{n:item.name,ord:`${item.qty} ${item.unit}`,got:`${got} ${item.unit}`,ok,diff:diff>0?`+${diff} ${item.unit}`:`${diff} ${item.unit}`};
+  });
+  o.reconciled=true;
+  const bad=o.ri.filter(r=>!r.ok).length;
+  cls('sh-deliver');render();
+  setTimeout(()=>toast(bad>0?`⚠️ Delivered — ${bad} discrepancy/ies flagged`:'✅ Delivered & fully reconciled'),100);
+}
+
+// ── AMEND ORDER (full screen) ──
+function openAmendOrder(oid){
+  const o=S.orders.find(x=>x.id===oid);
+  if(!o) return;
+  S.selOrder=oid;
+  S.amendOrderId=oid;
+  // Pre-fill cart from order items, matching catalog IDs by name
+  S.cart=o.items.map(item=>{
+    const cat=catalog.find(c=>c.name===item.name);
+    return{id:cat?cat.id:'x'+item.name,name:item.name,qty:item.qty,unit:item.unit,price:item.price};
+  });
+  S.catFilter='All';
+  nav('amend-order');
+}
+
+function rAmendOrder(){
+  const o=S.orders.find(x=>x.id===S.amendOrderId);
+  const cf=S.catFilter||'All';
+  const cats=['All','Meat','Bread','Sauce','Dips','Sides'];
+  const items=cf==='All'?catalog:catalog.filter(c=>c.cat===cf);
+  const newTotal=Math.round(S.cart.reduce((s,c)=>s+c.qty*c.price,0)*1.05);
+  const origTotal=o?o.total:0;
+  const diff=newTotal-origTotal;
+  return`<div class="sec">
+    <!-- diff banner -->
+    <div style="background:var(--sf-dim);border:1px solid var(--sf);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+      <div><div style="font-size:11px;font-weight:700;color:#B45309;text-transform:uppercase;letter-spacing:.05em;">Original Total</div>
+        <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;">₹${origTotal.toLocaleString()}</div></div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;font-weight:700;color:#B45309;text-transform:uppercase;letter-spacing:.05em;">Revised Total</div>
+        <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;color:${diff>0?'var(--ember)':diff<0?'var(--sage)':'var(--coal)'};">
+          ₹${newTotal.toLocaleString()}
+          ${diff!==0?`<span style="font-size:12px;">(${diff>0?'+':''}₹${diff.toLocaleString()})</span>`:''}
+        </div></div>
+    </div>
+    <!-- category filter -->
+    <div class="cr">
+      ${cats.map(c=>`<button class="chip ${cf===c?'on':''}" onclick="S.catFilter='${c}';render()">${c}</button>`).join('')}
+    </div>
+    <div class="card">
+      ${items.map(it=>{
+        const ci=S.cart.find(c=>c.id===it.id);
+        const qty=ci?ci.qty:0;
+        const inOriginal=o&&o.items.find(i=>i.name===it.name);
+        return`<div class="ci" style="${inOriginal?'background:rgba(232,168,56,.05);':''}">
+          <div class="cic">${it.em}</div>
+          <div style="flex:1;">
+            <div class="cn">${it.name} ${inOriginal?'<span style="font-size:10px;background:var(--sf-dim);color:#B45309;padding:1px 6px;border-radius:5px;font-weight:700;">in order</span>':''}</div>
+            <div class="cp">₹${it.price} / ${it.unit}</div>
+          </div>
+          <div class="qc">
+            <button class="qb minus" onclick="changeQty('${it.id}',-1)" style="${qty===0?'opacity:.25;pointer-events:none;':''}">−</button>
+            <span class="qv" style="${qty>0?'color:var(--sf);':'color:var(--muted);'}">${qty}</span>
+            <button class="qb plus" onclick="changeQty('${it.id}',1)">+</button>
+          </div>
+        </div>`;}).join('')}
+    </div>
+    <div style="height:80px;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:var(--wh);border-top:1px solid var(--bdr);z-index:10;">
+      <button class="btn btn-p btn-full" onclick="doAmend()">Submit Amendment Request</button>
+    </div>
+  </div>`;
+}
+
+function doAmend(){
+  const o=S.orders.find(x=>x.id===S.amendOrderId);
+  if(o){
+    o.status='amended';
+    o.amendedItems=S.cart.map(c=>({...c,total:c.qty*c.price}));
+    const sub=S.cart.reduce((s,c)=>s+c.qty*c.price,0);
+    o.amendedTotal=Math.round(sub*1.05);
+  }
+  S.cart=[];
+  S.selOrder=S.amendOrderId;
+  nav('order-detail');
+  setTimeout(()=>toast('✏️ Amendment sent to admin for approval'),200);
+}
+function doWaste(){
+  const item=document.getElementById('w-item')?.value||'Item';
+  const qty=document.getElementById('w-qty')?.value||'1';
+  const unit=document.getElementById('w-unit')?.value||'kg';
+  const reason=document.getElementById('w-reason')?.value||'Other';
+  const val=Math.round((pxMap[item]||200)*parseFloat(qty));
+  S.waste.unshift({item,qty:`${qty} ${unit}`,val,reason,date:'26 Jul'});
+  cls('sh-waste');render();
+  setTimeout(()=>toast('🗑️ Wastage logged'),100);
+}
+
+// ── SHEET HELPERS ──
+function ops(id){document.getElementById(id).classList.add('on');}
+function cls(id){document.getElementById(id).classList.remove('on');}
+
+// ── TOAST ──
+let _tt;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('on'),3000);
+}
+
+// ── INIT ──
+nav('home');
+</script>
+</body>
+</html>
