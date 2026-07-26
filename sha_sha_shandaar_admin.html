@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sha Sha Shandaar — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sf:#E8A838;--sf-dim:#FFF8E8;--sf-border:#F5D98B;
+  --coal:#1B1B2F;--coal2:#252542;--coal3:#31315a;
+  --page:#F0F2F5;--wh:#fff;
+  --sage:#27AE60;--sage-dim:#EAFAF1;
+  --ember:#C23B22;--ember-dim:#FEE2E2;
+  --sky:#2D9CDB;--sky-dim:#EBF5FB;
+  --amber:#F59E0B;--amber-dim:#FEF3C7;
+  --violet:#7C3AED;--violet-dim:#EDE9FE;
+  --txt:#111827;--muted:#6B7280;--bdr:#E5E7EB;--sbdr:#F3F4F6;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 4px 12px rgba(0,0,0,.1);
+  --R:10px;--SBW:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--page);color:var(--txt);display:flex;height:100vh;overflow:hidden;}
+
+/* ── SIDEBAR ── */
+.sb{width:var(--SBW);background:var(--coal);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;}
+.sb::-webkit-scrollbar{display:none;}
+.sb-logo{padding:22px 20px 16px;border-bottom:1px solid var(--coal3);}
+.sb-brand{font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:var(--sf);line-height:1.3;}
+.sb-tag{font-size:10px;color:rgba(255,255,255,.4);font-weight:500;margin-top:2px;}
+.sb-section{padding:20px 12px 8px;font-size:10px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;margin:1px 8px;cursor:pointer;color:rgba(255,255,255,.6);font-size:13px;font-weight:500;transition:all .15s;}
+.sb-item:hover{background:var(--coal2);color:rgba(255,255,255,.9);}
+.sb-item.on{background:rgba(232,168,56,.15);color:var(--sf);}
+.sb-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+.sb-badge{margin-left:auto;background:var(--ember);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;line-height:1.6;}
+.sb-bottom{margin-top:auto;padding:16px 8px;border-top:1px solid var(--coal3);}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;}
+.sb-avatar{width:34px;height:34px;border-radius:10px;background:var(--sf);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:var(--coal);flex-shrink:0;}
+.sb-uname{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.85);}
+.sb-urole{font-size:10.5px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+/* ── MAIN AREA ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{height:56px;background:var(--wh);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0;}
+.topbar-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:17px;flex:1;}
+.topbar-search{display:flex;align-items:center;gap:8px;background:var(--sbdr);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--muted);cursor:text;border:1.5px solid transparent;}
+.topbar-search:focus-within{border-color:var(--sf);background:var(--wh);}
+.topbar-search input{border:none;background:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;width:180px;color:var(--txt);}
+.topbar-search svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;}
+.tb-btn{padding:7px 10px;border-radius:8px;border:1.5px solid var(--bdr);background:var(--wh);cursor:pointer;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--txt);transition:border-color .15s;}
+.tb-btn:hover{border-color:var(--sf);}
+.tb-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
+.tb-notif{position:relative;}
+.tb-dot{position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--ember);border-radius:50%;border:1.5px solid var(--wh);}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;padding:24px;}
+.content::-webkit-scrollbar{width:5px;}
+.content::-webkit-scrollbar-track{background:transparent;}
+.content::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px;}
+.pg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.pg-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:20px;}
+.pg-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+
+/* ── CARDS ── */
+.card{background:var(--wh);border-radius:var(--R);border:1px solid var(--bdr);box-shadow:var(--shadow);}
+.cb{padding:18px 20px;}
+.card-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;margin-bottom:14px;}
+
+/* ── STAT CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.stat-card{background:var(--wh);border-radius:var(--R);border:1px solid var(--bdr);padding:18px 20px;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+.stat-card:hover{border-color:var(--sf-border);box-shadow:var(--shadow-md);}
+.stat-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.stat-value{font-family:'Poppins',sans-serif;font-weight:700;font-size:26px;line-height:1;}
+.stat-delta{font-size:11.5px;margin-top:5px;font-weight:600;}
+.delta-up{color:var(--sage);}
+.delta-dn{color:var(--ember);}
+.delta-nt{color:var(--muted);}
+.stat-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+
+/* ── BADGES ── */
+.bge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+.bg-pending{background:#FEF3C7;color:#B45309;}
+.bg-fulfilled{background:var(--sky-dim);color:#0369A1;}
+.bg-delivered{background:var(--sage-dim);color:var(--sage);}
+.bg-amended{background:var(--violet-dim);color:var(--violet);}
+.bg-paid{background:var(--sage-dim);color:var(--sage);}
+.bg-unpaid{background:var(--ember-dim);color:var(--ember);}
+.bg-overdue{background:var(--ember-dim);color:var(--ember);}
+.bg-active{background:var(--sage-dim);color:var(--sage);}
+.bg-paused{background:var(--amber-dim);color:#92400E;}
+.bg-inactive{background:var(--ember-dim);color:var(--ember);}
+.bg-removed{background:#F3F4F6;color:var(--muted);}
+
+/* ── DATA TABLE ── */
+.tbl-wrap{overflow-x:auto;}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{padding:10px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--sbdr);border-bottom:2px solid var(--bdr);white-space:nowrap;}
+.tbl td{padding:13px 16px;border-bottom:1px solid var(--bdr);font-size:13.5px;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tbody tr{cursor:pointer;transition:background .1s;}
+.tbl tbody tr:hover td{background:#FAFAFA;}
+.tbl tbody tr.no-hover{cursor:default;}
+.tbl tbody tr.no-hover:hover td{background:none;}
+.tbl-id{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;}
+.tbl-muted{font-size:12px;color:var(--muted);margin-top:1px;}
+
+/* ── BUTTONS ── */
+.btn{font-family:'Inter',sans-serif;font-weight:600;border:none;cursor:pointer;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s,background .15s;}
+.btn:active{opacity:.75;}
+.btn-p{background:var(--sf);color:var(--coal);padding:9px 16px;font-size:13px;}
+.btn-p:hover{background:#dca030;}
+.btn-s{background:var(--wh);color:var(--txt);border:1.5px solid var(--bdr);padding:8px 14px;font-size:13px;}
+.btn-s:hover{border-color:var(--sf);}
+.btn-danger{background:var(--ember-dim);color:var(--ember);padding:8px 14px;font-size:13px;}
+.btn-success{background:var(--sage-dim);color:var(--sage);padding:8px 14px;font-size:13px;}
+.btn-sky{background:var(--sky-dim);color:var(--sky);padding:8px 14px;font-size:13px;border:1px solid #bee3f8;}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px;}
+.btn-icon{width:30px;height:30px;padding:0;border-radius:7px;background:var(--sbdr);color:var(--muted);border:1px solid var(--bdr);}
+.btn-icon:hover{background:var(--bdr);}
+.btn-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ── FILTERS ── */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.filter-select{padding:8px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:var(--wh);color:var(--txt);cursor:pointer;}
+.filter-select:focus{outline:none;border-color:var(--sf);}
+.chip-grp{display:flex;gap:6px;}
+.chip{padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--bdr);background:var(--wh);color:var(--muted);transition:all .15s;}
+.chip.on{background:var(--sf);color:var(--coal);border-color:var(--sf);}
+.chip:hover:not(.on){border-color:var(--sf-border);}
+.search-input{padding:8px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:var(--wh);color:var(--txt);width:200px;}
+.search-input:focus{outline:none;border-color:var(--sf);}
+.ml-auto{margin-left:auto;}
+
+/* ── FORM ── */
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.form-input{width:100%;padding:10px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;color:var(--txt);background:var(--wh);}
+.form-input:focus{outline:none;border-color:var(--sf);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-textarea{width:100%;padding:10px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;color:var(--txt);resize:vertical;min-height:80px;}
+.form-textarea:focus{outline:none;border-color:var(--sf);}
+.form-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(27,27,47,.5);display:none;align-items:center;justify-content:center;z-index:1000;}
+.modal-ov.on{display:flex;}
+.modal-box{background:var(--wh);border-radius:16px;padding:28px;width:560px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.2);}
+.modal-box.wide{width:720px;}
+.modal-box::-webkit-scrollbar{width:4px;}
+.modal-box::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px;}
+.modal-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.modal-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-top:3px;}
+.modal-close{width:32px;height:32px;border-radius:8px;background:var(--sbdr);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;}
+.modal-close:hover{background:var(--bdr);}
+.modal-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ── ALERT BOX ── */
+.alert{padding:12px 14px;border-radius:8px;font-size:13px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px;}
+.alert-warn{background:var(--amber-dim);border:1px solid #FDE68A;color:#92400E;}
+.alert-error{background:var(--ember-dim);border:1px solid #FECACA;color:var(--ember);}
+.alert-info{background:var(--sky-dim);border:1px solid #BAE6FD;color:#0369A1;}
+.alert-success{background:var(--sage-dim);border:1px solid #A7F3D0;color:var(--sage);}
+
+/* ── DASHBOARD GRID ── */
+.dash-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;}
+.dash-left{display:flex;flex-direction:column;gap:16px;}
+.dash-right{display:flex;flex-direction:column;gap:16px;}
+
+/* ── FRANCHISE BAR ── */
+.f-bar-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--bdr);}
+.f-bar-row:last-child{border-bottom:none;}
+.f-bar-name{font-size:13px;font-weight:600;width:110px;flex-shrink:0;}
+.f-bar-track{flex:1;height:7px;background:var(--sbdr);border-radius:4px;}
+.f-bar-fill{height:100%;border-radius:4px;background:var(--sf);}
+.f-bar-amt{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;width:72px;text-align:right;flex-shrink:0;}
+
+/* ── INVOICE FLASH ── */
+.inv-flash{background:linear-gradient(135deg,var(--sage-dim),#d1fae5);border:1px solid #6EE7B7;border-radius:10px;padding:13px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+
+/* ── RECIPE CARDS ── */
+.recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.recipe-card{background:var(--wh);border:1px solid var(--bdr);border-radius:var(--R);padding:16px;position:relative;}
+.recipe-del{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:6px;background:var(--sbdr);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.recipe-del:hover{background:var(--ember-dim);color:var(--ember);}
+.recipe-del svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
+.recipe-trigger{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.recipe-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+.recipe-suggests{display:flex;flex-direction:column;gap:6px;}
+.recipe-sug{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--sf-dim);border-radius:7px;font-size:13px;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--coal);color:#fff;padding:13px 20px;border-radius:10px;font-size:13.5px;font-weight:500;display:none;z-index:2000;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap;gap:10px;align-items:center;}
+.toast.on{display:flex;}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--bdr);margin-bottom:20px;}
+.tab{padding:10px 18px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s;}
+.tab.on{color:var(--sf);border-bottom-color:var(--sf);}
+.tab:hover:not(.on){color:var(--txt);}
+
+/* ── PAYMENT ── */
+.pay-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--bdr);}
+.pay-row:last-child{border-bottom:none;}
+
+/* ── INVENTORY INLINE EDIT ── */
+.price-cell{display:flex;align-items:center;gap:6px;}
+.price-edit-input{width:75px;padding:5px 8px;border:1.5px solid var(--sf);border-radius:6px;font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:var(--txt);}
+.price-edit-input:focus{outline:none;}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:40px;color:var(--muted);}
+.empty-icon{font-size:36px;margin-bottom:10px;}
+.empty p{font-size:14px;}
+
+/* ── NOTIFICATION LOG ── */
+.notif-compose{display:grid;grid-template-columns:1fr 360px;gap:20px;}
+.notif-log-item{padding:13px 0;border-bottom:1px solid var(--bdr);display:flex;gap:12px;}
+.notif-log-item:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-brand">Sha Sha Shandaar<br>Shawarma</div>
+    <div class="sb-tag">Admin Dashboard</div>
+  </div>
+
+  <div class="sb-section">Main</div>
+  <div class="sb-item on" onclick="go('dashboard')" id="nav-dashboard">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Dashboard
+  </div>
+  <div class="sb-item" onclick="go('orders')" id="nav-orders">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+    All Orders
+    <span class="sb-badge" id="sb-orders-badge"></span>
+  </div>
+
+  <div class="sb-section">Catalogue</div>
+  <div class="sb-item" onclick="go('inventory')" id="nav-inventory">
+    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+    Inventory
+  </div>
+  <div class="sb-item" onclick="go('recipes')" id="nav-recipes">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Item Templates
+  </div>
+
+  <div class="sb-section">Business</div>
+  <div class="sb-item" onclick="go('franchises')" id="nav-franchises">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+    Franchises & Users
+  </div>
+  <div class="sb-item" onclick="go('payments')" id="nav-payments">
+    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    Payments
+    <span class="sb-badge" id="sb-pay-badge"></span>
+  </div>
+  <div class="sb-item" onclick="go('notifications')" id="nav-notifications">
+    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    Notifications
+  </div>
+  <div class="sb-item" onclick="go('reports')" id="nav-reports">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Reports
+  </div>
+
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">SA</div>
+      <div><div class="sb-uname">Super Admin</div><div class="sb-urole">admin@sha3.in</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search orders, franchises..." id="global-search" oninput="handleGlobalSearch(this.value)">
+    </div>
+    <button class="tb-btn tb-notif" onclick="go('notifications')">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="tb-dot"></span>
+    </button>
+    <button class="tb-btn" onclick="toast('Settings coming soon')">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+  </header>
+  <main class="content" id="content"></main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast-el"></div>
+
+<script>
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+const S={
+  screen:'dashboard',
+  ordFil:{franchise:'all',status:'all',search:''},
+  invFil:'all', rptTab:'item', notifTab:'compose',
+  editPriceId:null,
+
+  franchises:[
+    {id:'F1',name:'Koramangala',owner:'Rajesh Kumar',email:'rajesh@sha3.in',phone:'98765 43210',status:'active',since:'Jan 2024',orders:47,revenue:112000},
+    {id:'F2',name:'Indiranagar',owner:'Priya Sharma',email:'priya@sha3.in',phone:'98765 43211',status:'active',since:'Mar 2024',orders:38,revenue:94000},
+    {id:'F3',name:'HSR Layout',owner:'Amit Patel',email:'amit@sha3.in',phone:'98765 43212',status:'active',since:'Jun 2024',orders:31,revenue:78000},
+    {id:'F4',name:'Whitefield',owner:'Sneha Reddy',email:'sneha@sha3.in',phone:'98765 43213',status:'paused',since:'Sep 2024',orders:22,revenue:52000},
+    {id:'F5',name:'Jayanagar',owner:'Vikram Nair',email:'vikram@sha3.in',phone:'98765 43214',status:'active',since:'Nov 2024',orders:18,revenue:43000},
+  ],
+
+  orders:[
+    {id:'ORD-1042',fid:'F1',fr:'Koramangala',date:'25 Jul 2026',items:6,amt:7928,status:'delivered',pay:'paid',invoiceId:'INV-0982'},
+    {id:'ORD-1043',fid:'F2',fr:'Indiranagar',date:'25 Jul 2026',items:4,amt:5240,status:'pending',pay:'unpaid',itemList:[{n:'Chicken Shawarma Mix',q:8,u:'kg',p:300},{n:'Garlic Mayo',q:3,u:'kg',p:200},{n:'French Fries',q:10,u:'kg',p:120},{n:'Peri Peri Sauce',q:2,u:'kg',p:300}]},
+    {id:'ORD-1044',fid:'F3',fr:'HSR Layout',date:'25 Jul 2026',items:3,amt:3850,status:'pending',pay:'unpaid',itemList:[{n:'Pita Bread',q:150,u:'units',p:15},{n:'Hummus',q:4,u:'kg',p:350},{n:'Tahini',q:2,u:'kg',p:450}]},
+    {id:'ORD-1045',fid:'F1',fr:'Koramangala',date:'24 Jul 2026',items:5,amt:6395,status:'fulfilled',pay:'unpaid',invoiceId:'INV-0986'},
+    {id:'ORD-1046',fid:'F5',fr:'Jayanagar',date:'24 Jul 2026',items:4,amt:4200,status:'fulfilled',pay:'unpaid',invoiceId:'INV-0987'},
+    {id:'ORD-1047',fid:'F2',fr:'Indiranagar',date:'23 Jul 2026',items:7,amt:9100,status:'delivered',pay:'paid',invoiceId:'INV-0985'},
+    {id:'ORD-1048',fid:'F1',fr:'Koramangala',date:'22 Jul 2026',items:4,amt:4011,status:'amended',pay:'unpaid',
+      itemList:[{n:'Garlic Mayo',q:3,u:'kg',p:200},{n:'Peri Peri Sauce',q:2,u:'kg',p:300},{n:'Hummus',q:5,u:'kg',p:350},{n:'Tahini',q:1,u:'kg',p:450}],
+      amendment:{reason:'Need 2 extra kg Garlic Mayo for weekend demand',items:[{n:'Garlic Mayo',q:5,u:'kg',p:200},{n:'Peri Peri Sauce',q:2,u:'kg',p:300},{n:'Hummus',q:5,u:'kg',p:350},{n:'Tahini',q:1,u:'kg',p:450}]}},
+    {id:'ORD-1049',fid:'F3',fr:'HSR Layout',date:'22 Jul 2026',items:5,amt:6800,status:'delivered',pay:'overdue',invoiceId:'INV-0984'},
+    {id:'ORD-1050',fid:'F5',fr:'Jayanagar',date:'21 Jul 2026',items:3,amt:3200,status:'delivered',pay:'paid',invoiceId:'INV-0983'},
+    {id:'ORD-1051',fid:'F4',fr:'Whitefield',date:'20 Jul 2026',items:4,amt:5500,status:'delivered',pay:'paid',invoiceId:'INV-0981'},
+  ],
+
+  inventory:[
+    {id:'i1',name:'Chicken Shawarma Mix',price:300,unit:'kg',status:'active',em:'🍖'},
+    {id:'i2',name:'Pita Bread',price:15,unit:'units',status:'active',em:'🫓'},
+    {id:'i3',name:'Garlic Mayo',price:200,unit:'kg',status:'active',em:'🧄'},
+    {id:'i4',name:'Peri Peri Sauce',price:300,unit:'kg',status:'active',em:'🌶️'},
+    {id:'i5',name:'French Fries',price:120,unit:'kg',status:'active',em:'🍟'},
+    {id:'i6',name:'Hummus',price:350,unit:'kg',status:'active',em:'🫙'},
+    {id:'i7',name:'Tahini',price:450,unit:'kg',status:'paused',em:'🥗'},
+    {id:'i8',name:'Pickled Turnips',price:180,unit:'kg',status:'active',em:'🥒'},
+    {id:'i9',name:'Shawarma Spice Blend',price:800,unit:'kg',status:'active',em:'✨'},
+  ],
+
+  itemTemplateTab:'ordering',
+
+  recipes:[
+    {id:'r1',trigger:'Chicken Shawarma Mix',tQty:5,tUnit:'kg',suggests:[{item:'Garlic Mayo',qty:2.5,unit:'kg'},{item:'Peri Peri Sauce',qty:1,unit:'kg'},{item:'Tahini',qty:0.5,unit:'kg'}]},
+    {id:'r2',trigger:'Pita Bread',tQty:100,tUnit:'units',suggests:[{item:'Hummus',qty:1,unit:'kg'},{item:'Tahini',qty:0.5,unit:'kg'}]},
+    {id:'r3',trigger:'Hummus',tQty:1,tUnit:'kg',suggests:[{item:'Tahini',qty:0.5,unit:'kg'},{item:'Pickled Turnips',qty:0.5,unit:'kg'}]},
+  ],
+
+  productRecipes:[
+    {id:'pr1',name:'Regular Shawarma',category:'Wraps',sellingPrice:180,em:'🥙',
+      ingredients:[
+        {name:'Chicken Shawarma Mix',qty:80,unit:'g',invId:'i1',type:'raw'},
+        {name:'Salad Mix (Tomato, Onion, Coriander)',qty:20,unit:'g',invId:null,type:'raw'},
+        {name:'Garlic Mayo',qty:30,unit:'g',invId:'i3',type:'raw'},
+        {name:'Tahini',qty:10,unit:'g',invId:'i7',type:'raw'},
+        {name:'Shawarma Box',qty:1,unit:'units',invId:null,type:'packaging',cost:5},
+        {name:'Silver Foil',qty:1,unit:'units',invId:null,type:'packaging',cost:1.5},
+        {name:'Sauce Pack',qty:1,unit:'units',invId:null,type:'packaging',cost:2},
+        {name:'Tissue',qty:1,unit:'units',invId:null,type:'packaging',cost:0.5},
+      ]},
+    {id:'pr2',name:'Pita Pocket',category:'Wraps',sellingPrice:140,em:'🫓',
+      ingredients:[
+        {name:'Pita Bread',qty:1,unit:'units',invId:'i2',type:'raw'},
+        {name:'Hummus',qty:40,unit:'g',invId:'i6',type:'raw'},
+        {name:'Salad Mix',qty:25,unit:'g',invId:null,type:'raw'},
+        {name:'Tahini',qty:15,unit:'g',invId:'i7',type:'raw'},
+        {name:'Garlic Mayo',qty:15,unit:'g',invId:'i3',type:'raw'},
+        {name:'Pita Box',qty:1,unit:'units',invId:null,type:'packaging',cost:4},
+        {name:'Tissue',qty:1,unit:'units',invId:null,type:'packaging',cost:0.5},
+      ]},
+    {id:'pr3',name:'Fries Platter',category:'Sides',sellingPrice:100,em:'🍟',
+      ingredients:[
+        {name:'French Fries',qty:200,unit:'g',invId:'i5',type:'raw'},
+        {name:'Garlic Mayo',qty:30,unit:'g',invId:'i3',type:'raw'},
+        {name:'Peri Peri Sauce',qty:20,unit:'g',invId:'i4',type:'raw'},
+        {name:'Fries Box',qty:1,unit:'units',invId:null,type:'packaging',cost:3},
+        {name:'Tissue',qty:1,unit:'units',invId:null,type:'packaging',cost:0.5},
+      ]},
+  ],
+
+  pending:[
+    {id:'P1',inv:'INV-0988',fid:'F2',fr:'Indiranagar',oid:'ORD-1043',amt:5240,due:'28 Jul 2026',status:'pending',reminderSent:false},
+    {id:'P2',inv:'INV-0986',fid:'F1',fr:'Koramangala',oid:'ORD-1045',amt:6395,due:'27 Jul 2026',status:'overdue',reminderSent:true,reminderDate:'25 Jul 2026'},
+    {id:'P3',inv:'INV-0984',fid:'F3',fr:'HSR Layout',oid:'ORD-1049',amt:6800,due:'25 Jul 2026',status:'overdue',reminderSent:false},
+  ],
+  phist:[
+    {inv:'INV-0987',fr:'Jayanagar',amt:4200,method:'UPI',date:'25 Jul 2026'},
+    {inv:'INV-0982',fr:'Koramangala',amt:7928,method:'UPI',date:'25 Jul 2026'},
+    {inv:'INV-0985',fr:'Indiranagar',amt:9100,method:'Bank Transfer',date:'24 Jul 2026'},
+    {inv:'INV-0983',fr:'Jayanagar',amt:3200,method:'UPI',date:'22 Jul 2026'},
+    {inv:'INV-0981',fr:'Whitefield',amt:5500,method:'UPI',date:'21 Jul 2026'},
+  ],
+
+  sentNotifs:[
+    {to:'All Franchises',subject:'Price Update — August 2026',msg:'Chicken Shawarma Mix increases to ₹320/kg from 1 Aug 2026.',date:'18 Jul 2026',channel:'Email + App'},
+    {to:'Koramangala',subject:'Payment Reminder — INV-0986',msg:'Your payment of ₹6,395 is 2 days overdue. Please process immediately.',date:'25 Jul 2026',channel:'Email'},
+    {to:'Whitefield',subject:'Account Paused',msg:'Your franchise account has been temporarily paused. Please contact admin.',date:'15 Jul 2026',channel:'Email + App'},
+  ],
+};
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+const TITLES={dashboard:'Dashboard',orders:'All Orders',inventory:'Inventory Management',recipes:'Item Templates',franchises:'Franchises & Users',payments:'Payments',notifications:'Notifications',reports:'Reports'};
+
+function go(sc){
+  S.screen=sc;
+  document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('on'));
+  const nav=document.getElementById('nav-'+sc);
+  if(nav) nav.classList.add('on');
+  document.getElementById('topbar-title').textContent=TITLES[sc]||sc;
+  updateBadges();
+  render();
+}
+
+function updateBadges(){
+  const pendOrds=S.orders.filter(o=>o.status==='pending'||o.status==='amended').length;
+  const pendPay=S.pending.length;
+  const ob=document.getElementById('sb-orders-badge');
+  const pb=document.getElementById('sb-pay-badge');
+  if(ob) ob.textContent=pendOrds||''; if(ob) ob.style.display=pendOrds?'':'none';
+  if(pb) pb.textContent=pendPay||''; if(pb) pb.style.display=pendPay?'':'none';
+}
+
+// ══════════════════════════════════════
+// RENDER DISPATCH
+// ══════════════════════════════════════
+function render(){
+  const renders={dashboard:rDash,orders:rOrders,inventory:rInv,recipes:rRecipes,franchises:rFranchises,payments:rPayments,notifications:rNotifs,reports:rReports};
+  document.getElementById('content').innerHTML=(renders[S.screen]||rDash)();
+}
+
+// ══════════════════════════════════════
+// BADGE HELPER
+// ══════════════════════════════════════
+function bg(st){
+  const m={pending:['bg-pending','Pending'],fulfilled:['bg-fulfilled','Fulfilled'],delivered:['bg-delivered','Delivered'],amended:['bg-amended','Amended'],paid:['bg-paid','Paid'],unpaid:['bg-unpaid','Unpaid'],overdue:['bg-overdue','Overdue ⚠'],active:['bg-active','Active'],paused:['bg-paused','Paused'],inactive:['bg-inactive','Inactive'],removed:['bg-removed','Removed']};
+  const[c,l]=m[st]||['bg-pending',st];
+  return`<span class="bge ${c}">${l}</span>`;
+}
+
+// ══════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════
+function rDash(){
+  const totalRev=S.franchises.reduce((s,f)=>s+f.revenue,0);
+  const pendOrds=S.orders.filter(o=>o.status==='pending').length;
+  const amendOrds=S.orders.filter(o=>o.status==='amended').length;
+  const overdueAmt=S.pending.filter(p=>p.status==='overdue').reduce((s,p)=>s+p.amt,0);
+  const maxRev=Math.max(...S.franchises.map(f=>f.revenue));
+
+  return`
+  <div class="stats-grid">
+    <div class="stat-card" onclick="go('orders')">
+      <div class="stat-label"><span style="font-size:16px;">📋</span> Total Orders</div>
+      <div class="stat-value">${S.orders.length+142}</div>
+      <div class="stat-delta delta-up">↑ 18% this month</div>
+    </div>
+    <div class="stat-card" onclick="go('reports')">
+      <div class="stat-label"><span style="font-size:16px;">💰</span> Revenue (July)</div>
+      <div class="stat-value">₹${(totalRev/100000).toFixed(1)}L</div>
+      <div class="stat-delta delta-up">↑ 12% vs June</div>
+    </div>
+    <div class="stat-card" onclick="go('franchises')">
+      <div class="stat-label"><span style="font-size:16px;">🏪</span> Active Franchises</div>
+      <div class="stat-value">${S.franchises.filter(f=>f.status==='active').length}</div>
+      <div class="stat-delta delta-nt">of ${S.franchises.length} total</div>
+    </div>
+    <div class="stat-card" onclick="go('payments')" style="border-color:${overdueAmt>0?'#FECACA':'var(--bdr)'};">
+      <div class="stat-label"><span style="font-size:16px;">⚠️</span> Overdue Payments</div>
+      <div class="stat-value" style="color:${overdueAmt>0?'var(--ember)':'var(--sage)'};">₹${(overdueAmt/1000).toFixed(1)}K</div>
+      <div class="stat-delta delta-dn">${S.pending.filter(p=>p.status==='overdue').length} invoice(s) overdue</div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="dash-left">
+      <!-- Alerts -->
+      ${pendOrds>0||amendOrds>0?`<div>
+        ${S.orders.filter(o=>o.status==='pending').slice(0,2).map(o=>`
+          <div class="alert alert-info" style="margin-bottom:8px;">
+            <span style="font-size:18px;">📋</span>
+            <div style="flex:1;">
+              <strong>#${o.id}</strong> from ${o.fr} — ${o.items} items · ₹${o.amt.toLocaleString()} needs fulfillment
+            </div>
+            <button class="btn btn-sky btn-sm" onclick="openFulfillModal('${o.id}',event)">Fulfill</button>
+          </div>`).join('')}
+        ${S.orders.filter(o=>o.status==='amended').map(o=>`
+          <div class="alert alert-warn" style="margin-bottom:8px;">
+            <span style="font-size:18px;">✏️</span>
+            <div style="flex:1;">
+              <strong>#${o.id}</strong> from ${o.fr} has an amendment pending approval
+            </div>
+            <button class="btn btn-sm" style="background:var(--amber-dim);color:#92400E;padding:5px 11px;font-size:12px;border-radius:6px;border:none;cursor:pointer;font-weight:600;" onclick="openAmendModal('${o.id}',event)">Review</button>
+          </div>`).join('')}
+      </div>`:''}
+
+      <!-- Recent Orders Table -->
+      <div class="card">
+        <div class="cb" style="padding-bottom:0;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div class="card-title" style="margin-bottom:0;">Recent Orders</div>
+            <button class="btn btn-s btn-sm" onclick="go('orders')">View All →</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Order ID</th><th>Franchise</th><th>Date</th><th>Amount</th><th>Status</th><th>Payment</th><th>Action</th></tr></thead>
+            <tbody>
+              ${S.orders.slice(0,6).map(o=>`
+                <tr onclick="openOrderModal('${o.id}')">
+                  <td><span class="tbl-id">#${o.id}</span></td>
+                  <td><span style="font-weight:600;">${o.fr}</span></td>
+                  <td style="color:var(--muted);font-size:13px;">${o.date}</td>
+                  <td><span style="font-family:'Poppins',sans-serif;font-weight:700;">₹${o.amt.toLocaleString()}</span></td>
+                  <td>${bg(o.status)}</td>
+                  <td>${bg(o.pay)}</td>
+                  <td onclick="event.stopPropagation()">
+                    ${o.status==='pending'?`<button class="btn btn-sky btn-sm" onclick="fulfillOrder('${o.id}',event)">Fulfill</button>`:''}
+                    ${o.status==='fulfilled'?`<button class="btn btn-success btn-sm" onclick="markDelivered('${o.id}',event)">Mark Delivered</button>`:''}
+                    ${o.status==='amended'?`<button class="btn btn-sm" style="background:var(--amber-dim);color:#92400E;border:none;cursor:pointer;padding:5px 11px;font-size:12px;border-radius:6px;font-weight:600;" onclick="openAmendModal('${o.id}',event)">Review</button>`:''}
+                    ${o.status==='delivered'?`<span style="font-size:12px;color:var(--muted);">—</span>`:''}
+                  </td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-right">
+      <!-- Franchise Revenue -->
+      <div class="card">
+        <div class="cb">
+          <div class="card-title">Franchise Revenue · July</div>
+          ${S.franchises.map(f=>`
+            <div class="f-bar-row">
+              <span class="f-bar-name">${f.name}</span>
+              <div class="f-bar-track"><div class="f-bar-fill" style="width:${Math.round(f.revenue/maxRev*100)}%;opacity:${f.status==='paused'?.4:1};"></div></div>
+              <span class="f-bar-amt">₹${(f.revenue/1000).toFixed(0)}K</span>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Overdue Payments -->
+      <div class="card">
+        <div class="cb" style="padding-bottom:0;">
+          <div class="card-title">Overdue Payments</div>
+          ${S.pending.filter(p=>p.status==='overdue').map(p=>`
+            <div class="pay-row">
+              <div>
+                <div style="font-weight:700;font-size:13.5px;">${p.fr}</div>
+                <div style="font-size:12px;color:var(--muted);">#${p.inv} · Due ${p.due}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:var(--ember);">₹${p.amt.toLocaleString()}</div>
+                <button class="btn btn-danger btn-sm" style="margin-top:4px;" onclick="sendReminder('${p.id}',event)">${p.reminderSent?'Resend Reminder':'Send Reminder'}</button>
+              </div>
+            </div>`).join('')}
+          ${S.pending.filter(p=>p.status==='overdue').length===0?`<div class="empty" style="padding:20px 0;"><div class="empty-icon">✅</div><p>No overdue payments</p></div>`:''}
+          <div style="padding:12px 0;"></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// ORDERS
+// ══════════════════════════════════════
+function rOrders(){
+  const{franchise:fFil,status:sFil,search}=S.ordFil;
+  let list=S.orders;
+  if(fFil!=='all') list=list.filter(o=>o.fid===fFil);
+  if(sFil!=='all') list=list.filter(o=>o.status===sFil);
+  if(search) list=list.filter(o=>o.id.toLowerCase().includes(search.toLowerCase())||o.fr.toLowerCase().includes(search.toLowerCase()));
+
+  return`
+  <div class="pg-header">
+    <div><div class="pg-title">All Orders</div><div class="pg-sub">${S.orders.length} orders across ${S.franchises.length} franchises</div></div>
+  </div>
+  <div class="filter-bar">
+    <select class="filter-select" onchange="S.ordFil.franchise=this.value;render()">
+      <option value="all">All Franchises</option>
+      ${S.franchises.map(f=>`<option value="${f.id}" ${fFil===f.id?'selected':''}>${f.name}</option>`).join('')}
+    </select>
+    <div class="chip-grp">
+      ${['all','pending','fulfilled','delivered','amended'].map(s=>`
+        <span class="chip ${sFil===s?'on':''}" onclick="S.ordFil.status='${s}';render()">${s.charAt(0).toUpperCase()+s.slice(1)}</span>`).join('')}
+    </div>
+    <input class="search-input ml-auto" placeholder="Search order ID or franchise..." value="${search}" oninput="S.ordFil.search=this.value;render()">
+  </div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Order ID</th><th>Franchise</th><th>Date</th><th>Items</th><th>Amount</th><th>Order Status</th><th>Payment</th><th style="width:160px;">Actions</th></tr></thead>
+        <tbody>
+          ${list.length===0?`<tr class="no-hover"><td colspan="8"><div class="empty"><div class="empty-icon">📭</div><p>No orders match this filter</p></div></td></tr>`:''}
+          ${list.map(o=>`
+            <tr onclick="openOrderModal('${o.id}')">
+              <td><span class="tbl-id">#${o.id}</span>${o.invoiceId?`<div class="tbl-muted">${o.invoiceId}</div>`:''}</td>
+              <td><span style="font-weight:600;">${o.fr}</span></td>
+              <td style="color:var(--muted);font-size:13px;">${o.date}</td>
+              <td style="color:var(--muted);">${o.items} items</td>
+              <td><span style="font-family:'Poppins',sans-serif;font-weight:700;">₹${o.amt.toLocaleString()}</span></td>
+              <td>${bg(o.status)}</td>
+              <td>${bg(o.pay)}</td>
+              <td onclick="event.stopPropagation()">
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  ${o.status==='pending'?`<button class="btn btn-sky btn-sm" onclick="openFulfillModal('${o.id}',event)">⚡ Fulfill</button>`:''}
+                  ${o.status==='fulfilled'?`<button class="btn btn-success btn-sm" onclick="markDelivered('${o.id}',event)">✓ Delivered</button>`:''}
+                  ${o.status==='amended'?`<button class="btn btn-sm" style="background:var(--amber-dim);color:#92400E;border:none;cursor:pointer;font-weight:600;padding:5px 11px;font-size:12px;border-radius:6px;" onclick="openAmendModal('${o.id}',event)">✏️ Review</button>`:''}
+                  <button class="btn-icon btn" onclick="openOrderModal('${o.id}')" title="View Details">
+                    <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// INVENTORY
+// ══════════════════════════════════════
+function rInv(){
+  const f=S.invFil;
+  const list=f==='all'?S.inventory:S.inventory.filter(i=>i.status===f);
+  const activeCount=S.inventory.filter(i=>i.status==='active').length;
+  const pausedCount=S.inventory.filter(i=>i.status==='paused').length;
+
+  return`
+  <div class="pg-header">
+    <div><div class="pg-title">Inventory Management</div><div class="pg-sub">${activeCount} active · ${pausedCount} paused · Changes reflect in franchise portals immediately</div></div>
+    <button class="btn btn-p" onclick="openModal('add-item')">+ Add Item</button>
+  </div>
+  <div class="filter-bar">
+    <div class="chip-grp">
+      ${['all','active','paused'].map(s=>`<span class="chip ${f===s?'on':''}" onclick="S.invFil='${s}';render()">${s.charAt(0).toUpperCase()+s.slice(1)}</span>`).join('')}
+    </div>
+    <span style="font-size:13px;color:var(--muted);margin-left:8px;">${list.length} item(s)</span>
+  </div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Item</th><th>Price</th><th>Unit</th><th>Status</th><th style="width:220px;">Actions</th></tr></thead>
+        <tbody>
+          ${list.map(item=>`
+            <tr class="no-hover">
+              <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:22px;">${item.em}</span>
+                  <span style="font-weight:600;font-size:14px;">${item.name}</span>
+                </div>
+              </td>
+              <td>
+                ${S.editPriceId===item.id
+                  ?`<div class="price-cell"><span style="color:var(--muted);font-size:12px;">₹</span><input class="price-edit-input" id="price-inp-${item.id}" value="${item.price}" type="number" min="1" autofocus>
+                     <button class="btn btn-success btn-sm" onclick="savePrice('${item.id}')">Save</button>
+                     <button class="btn btn-s btn-sm" onclick="S.editPriceId=null;render()">✕</button></div>`
+                  :`<div class="price-cell" style="cursor:pointer;" onclick="S.editPriceId='${item.id}';render()" title="Click to edit price">
+                      <span style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">₹${item.price}</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </div>`}
+              </td>
+              <td>
+                <select class="filter-select" style="padding:5px 10px;font-size:12.5px;" onchange="changeUnit('${item.id}',this.value)">
+                  <option ${item.unit==='kg'?'selected':''}>kg</option>
+                  <option ${item.unit==='units'?'selected':''}>units</option>
+                  <option ${item.unit==='litres'?'selected':''}>litres</option>
+                </select>
+              </td>
+              <td>${bg(item.status)}</td>
+              <td>
+                <div style="display:flex;gap:6px;">
+                  ${item.status==='active'
+                    ?`<button class="btn btn-sm" style="background:var(--amber-dim);color:#92400E;border:none;cursor:pointer;font-weight:600;padding:5px 11px;font-size:12px;border-radius:6px;" onclick="toggleItem('${item.id}','paused')">⏸ Pause</button>`
+                    :`<button class="btn btn-success btn-sm" onclick="toggleItem('${item.id}','active')">▶ Activate</button>`}
+                  <button class="btn btn-s btn-sm" onclick="openModal('edit-item','${item.id}')">Edit</button>
+                  <button class="btn btn-danger btn-sm" onclick="removeItem('${item.id}')">Remove</button>
+                </div>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function savePrice(id){
+  const inp=document.getElementById('price-inp-'+id);
+  if(!inp) return;
+  const val=parseFloat(inp.value);
+  if(isNaN(val)||val<=0){toast('Enter a valid price');return;}
+  const item=S.inventory.find(i=>i.id===id);
+  if(item){item.price=val;}
+  S.editPriceId=null;
+  render();toast(`✅ Price updated to ₹${val} for ${item.name}`);
+}
+function changeUnit(id,unit){
+  const item=S.inventory.find(i=>i.id===id);
+  if(item) item.unit=unit;
+  toast(`Unit changed to "${unit}" for ${item.name}`);
+}
+function toggleItem(id,newStatus){
+  const item=S.inventory.find(i=>i.id===id);
+  if(item) item.status=newStatus;
+  render();
+  toast(newStatus==='paused'?`⏸ ${item.name} paused — hidden from franchise portal`:`▶ ${item.name} activated — visible to all franchises`);
+}
+function removeItem(id){
+  const item=S.inventory.find(i=>i.id===id);
+  if(!item) return;
+  if(!confirm(`Remove "${item.name}" from inventory? This cannot be undone.`)) return;
+  S.inventory=S.inventory.filter(i=>i.id!==id);
+  render();toast(`🗑️ ${item.name} removed from inventory`);
+}
+
+// ══════════════════════════════════════
+// ITEM TEMPLATES (two tabs)
+// ══════════════════════════════════════
+function rRecipes(){
+  const t=S.itemTemplateTab;
+  return`
+  <div class="pg-header">
+    <div>
+      <div class="pg-title">Item Templates</div>
+      <div class="pg-sub">Ordering suggestions for franchise orders · Product recipes for cost & yield analysis</div>
+    </div>
+    <button class="btn btn-p" onclick="openModal(S.itemTemplateTab==='ordering'?'add-recipe':'add-product-recipe')">
+      + ${t==='ordering'?'Add Ordering Template':'Add Product Recipe'}
+    </button>
+  </div>
+  <div class="tab-bar">
+    <div class="tab ${t==='ordering'?'on':''}" onclick="S.itemTemplateTab='ordering';render()">Ordering Suggestions</div>
+    <div class="tab ${t==='product'?'on':''}" onclick="S.itemTemplateTab='product';render()">Product Recipes</div>
+  </div>
+  ${t==='ordering'?rOrderingTemplates():rProductRecipes()}`;
+}
+
+function rOrderingTemplates(){
+  return`
+  <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">When a franchise adds the trigger item to their order, these items are automatically suggested.</p>
+  <div class="recipe-grid">
+    ${S.recipes.map(r=>`
+      <div class="recipe-card">
+        <button class="recipe-del" onclick="deleteRecipe('${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+        <div class="recipe-trigger">When ordering ≥ ${r.tQty} ${r.tUnit} of</div>
+        <div class="recipe-name">${r.trigger}</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Suggest adding:</div>
+        <div class="recipe-suggests">
+          ${r.suggests.map(s=>`
+            <div class="recipe-sug">
+              <span style="font-size:18px;">${S.inventory.find(i=>i.name===s.item)?.em||'📦'}</span>
+              <span><strong>${s.item}</strong> — ${s.qty} ${s.unit}</span>
+            </div>`).join('')}
+        </div>
+      </div>`).join('')}
+    <div style="border:2px dashed var(--bdr);border-radius:var(--R);padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;color:var(--muted);" onclick="openModal('add-recipe')">
+      <span style="font-size:28px;">+</span>
+      <span style="font-size:13px;font-weight:600;">Add Ordering Template</span>
+    </div>
+  </div>`;
+}
+
+function rProductRecipes(){
+  return`
+  <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Define what goes into each menu item. Used to calculate raw material cost, expected yield, and wastage.</p>
+  <div class="recipe-grid">
+    ${S.productRecipes.map(r=>{
+      // Calculate raw material cost
+      const rawCost=r.ingredients.filter(i=>i.invId).reduce((s,i)=>{
+        const invItem=S.inventory.find(x=>x.id===i.invId);
+        if(!invItem) return s;
+        const costPerG=invItem.unit==='kg'?invItem.price/1000:invItem.price;
+        return s+(costPerG*i.qty);
+      },0);
+      const pkgCost=r.ingredients.filter(i=>i.type==='packaging'&&i.cost).reduce((s,i)=>s+i.cost,0);
+      const totalCost=rawCost+pkgCost;
+      const margin=r.sellingPrice-totalCost;
+      return`
+        <div class="recipe-card">
+          <button class="recipe-del" onclick="deleteProductRecipe('${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span style="font-size:28px;">${r.em}</span>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">${r.category}</div>
+              <div class="recipe-name" style="margin-bottom:0;">${r.name}</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div style="background:var(--sbdr);border-radius:7px;padding:8px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:2px;">Cost</div>
+              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;">₹${totalCost.toFixed(1)}</div>
+            </div>
+            <div style="background:var(--sbdr);border-radius:7px;padding:8px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:2px;">Selling</div>
+              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;">₹${r.sellingPrice}</div>
+            </div>
+            <div style="background:${margin>0?'var(--sage-dim)':'var(--ember-dim)'};border-radius:7px;padding:8px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:2px;">Margin</div>
+              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:${margin>0?'var(--sage)':'var(--ember)'};">₹${margin.toFixed(1)}</div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">Ingredients (${r.ingredients.length})</div>
+          <div style="max-height:130px;overflow-y:auto;">
+            ${r.ingredients.map(i=>`
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--sbdr);font-size:12.5px;">
+                <span style="color:${i.type==='packaging'?'var(--sky)':'var(--txt)'};">${i.name}</span>
+                <span style="color:var(--muted);font-weight:600;">${i.qty}${i.unit}</span>
+              </div>`).join('')}
+          </div>
+          <button class="btn btn-s btn-sm" style="width:100%;margin-top:10px;" onclick="openModal('edit-product-recipe','${r.id}')">Edit Recipe</button>
+        </div>`;}).join('')}
+    <div style="border:2px dashed var(--bdr);border-radius:var(--R);padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;color:var(--muted);" onclick="openModal('add-product-recipe')">
+      <span style="font-size:28px;">+</span>
+      <span style="font-size:13px;font-weight:600;">Add Product Recipe</span>
+    </div>
+  </div>`;
+}
+
+function deleteRecipe(id){S.recipes=S.recipes.filter(r=>r.id!==id);render();toast('Ordering template removed');}
+function deleteProductRecipe(id){S.productRecipes=S.productRecipes.filter(r=>r.id!==id);render();toast('Product recipe removed');}
+
+// ══════════════════════════════════════
+// FRANCHISES & USERS
+// ══════════════════════════════════════
+function rFranchises(){
+  return`
+  <div class="pg-header">
+    <div><div class="pg-title">Franchises & Users</div><div class="pg-sub">${S.franchises.filter(f=>f.status==='active').length} active, ${S.franchises.filter(f=>f.status==='paused').length} paused</div></div>
+    <button class="btn btn-p" onclick="openModal('add-franchise')">+ New Franchise</button>
+  </div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Franchise / Owner</th><th>Contact</th><th>Member Since</th><th>Orders</th><th>Revenue</th><th>Status</th><th style="width:200px;">Actions</th></tr></thead>
+        <tbody>
+          ${S.franchises.map(f=>`
+            <tr class="no-hover">
+              <td>
+                <div style="font-weight:700;font-size:14px;">${f.name}</div>
+                <div class="tbl-muted">${f.owner}</div>
+              </td>
+              <td>
+                <div style="font-size:13px;">${f.email}</div>
+                <div class="tbl-muted">${f.phone}</div>
+              </td>
+              <td style="color:var(--muted);font-size:13px;">${f.since}</td>
+              <td><span style="font-weight:600;">${f.orders}</span></td>
+              <td><span style="font-family:'Poppins',sans-serif;font-weight:700;">₹${(f.revenue/1000).toFixed(0)}K</span></td>
+              <td>${bg(f.status)}</td>
+              <td>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <button class="btn btn-s btn-sm" onclick="openModal('view-franchise','${f.id}')">View</button>
+                  ${f.status==='active'
+                    ?`<button class="btn btn-danger btn-sm" onclick="toggleFranchise('${f.id}','paused')">Pause</button>`
+                    :`<button class="btn btn-success btn-sm" onclick="toggleFranchise('${f.id}','active')">Activate</button>`}
+                  <button class="btn btn-s btn-sm" onclick="sendNotifTo('${f.name}')">Message</button>
+                </div>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+function toggleFranchise(id,status){
+  const f=S.franchises.find(x=>x.id===id);
+  if(f) f.status=status;
+  render();
+  toast(status==='paused'?`⏸ ${f.name} paused — login disabled`:`✅ ${f.name} reactivated`);
+}
+function sendNotifTo(name){
+  S.screen='notifications';
+  S.notifTarget=name;
+  go('notifications');
+}
+
+// ══════════════════════════════════════
+// PAYMENTS
+// ══════════════════════════════════════
+function rPayments(){
+  return`
+  <div class="pg-header">
+    <div><div class="pg-title">Payments</div><div class="pg-sub">${S.pending.length} pending · ₹${S.pending.reduce((s,p)=>s+p.amt,0).toLocaleString()} outstanding</div></div>
+  </div>
+
+  ${S.pending.length>0?`
+  <div class="card" style="margin-bottom:20px;">
+    <div class="cb" style="padding-bottom:0;">
+      <div class="card-title">Outstanding Invoices</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Invoice</th><th>Franchise</th><th>Order</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            ${S.pending.map(p=>`
+              <tr class="no-hover">
+                <td><span class="tbl-id">#${p.inv}</span></td>
+                <td><span style="font-weight:600;">${p.fr}</span></td>
+                <td style="color:var(--muted);">#${p.oid}</td>
+                <td><span style="font-family:'Poppins',sans-serif;font-weight:700;color:var(--ember);">₹${p.amt.toLocaleString()}</span></td>
+                <td style="color:${p.status==='overdue'?'var(--ember)':'var(--txt)'};font-weight:${p.status==='overdue'?700:400};">${p.due}</td>
+                <td>${bg(p.status)}${p.reminderSent?`<div style="font-size:11px;color:var(--muted);margin-top:3px;">Reminded ${p.reminderDate||'recently'}</div>`:''}</td>
+                <td>
+                  <div style="display:flex;gap:6px;">
+                    <button class="btn btn-danger btn-sm" onclick="sendReminder('${p.id}',event)">${p.reminderSent?'Resend Reminder':'Send Reminder'}</button>
+                    <button class="btn btn-success btn-sm" onclick="markPaid('${p.id}')">Mark Paid</button>
+                  </div>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`:''}
+
+  <div class="card">
+    <div class="cb" style="padding-bottom:0;">
+      <div class="card-title">Payment History</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Invoice</th><th>Franchise</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            ${S.phist.map(p=>`
+              <tr class="no-hover">
+                <td><span class="tbl-id">#${p.inv}</span></td>
+                <td style="font-weight:600;">${p.fr}</td>
+                <td><span style="font-family:'Poppins',sans-serif;font-weight:700;">₹${p.amt.toLocaleString()}</span></td>
+                <td style="color:var(--muted);">${p.method}</td>
+                <td style="color:var(--muted);">${p.date}</td>
+                <td>${bg('paid')}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+function sendReminder(id,ev){
+  if(ev) ev.stopPropagation();
+  const p=S.pending.find(x=>x.id===id);
+  if(!p) return;
+  p.reminderSent=true;
+  p.reminderDate='26 Jul 2026';
+  render();toast(`📧 Payment reminder sent to ${p.fr} for ₹${p.amt.toLocaleString()}`);
+}
+function markPaid(id){
+  const p=S.pending.find(x=>x.id===id);
+  if(!p) return;
+  const ord=S.orders.find(o=>o.id===p.oid);
+  if(ord) ord.pay='paid';
+  S.phist.unshift({inv:p.inv,fr:p.fr,amt:p.amt,method:'Manual Entry',date:'26 Jul 2026'});
+  S.pending=S.pending.filter(x=>x.id!==id);
+  render();toast(`✅ Payment received — ₹${p.amt.toLocaleString()} from ${p.fr}`);
+}
+
+// ══════════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════════
+function rNotifs(){
+  const target=S.notifTarget||'';
+  return`
+  <div class="pg-header">
+    <div class="pg-title">Notifications</div>
+  </div>
+  <div class="notif-compose">
+    <div class="card">
+      <div class="cb">
+        <div class="card-title">Compose & Send</div>
+        <div class="form-group">
+          <label class="form-label">Send To</label>
+          <select class="form-input" id="notif-to">
+            <option value="All Franchises" ${!target?'selected':''}>📢 All Franchises</option>
+            ${S.franchises.map(f=>`<option value="${f.name}" ${target===f.name?'selected':''}>${f.name}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Channel</label>
+          <select class="form-input" id="notif-channel">
+            <option>Email + In-App</option>
+            <option>Email only</option>
+            <option>In-App only</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input class="form-input" id="notif-subject" placeholder="e.g. Price update for August 2026">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" id="notif-msg" rows="5" placeholder="Type your message here..."></textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-p" onclick="sendNotification()" style="flex:1;padding:11px;">Send Notification</button>
+          <button class="btn btn-s" onclick="toast('Saved as draft')">Save Draft</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="max-height:520px;overflow:hidden;display:flex;flex-direction:column;">
+      <div class="cb" style="padding-bottom:0;flex-shrink:0;"><div class="card-title">Sent Log</div></div>
+      <div style="overflow-y:auto;padding:0 20px 20px;">
+        ${S.sentNotifs.map(n=>`
+          <div class="notif-log-item">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--sf-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📣</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;font-size:13.5px;">${n.subject}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;">To: ${n.to} · ${n.channel}</div>
+              <div style="font-size:12px;color:var(--muted);">${n.date}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+function sendNotification(){
+  const to=document.getElementById('notif-to')?.value||'All Franchises';
+  const subject=document.getElementById('notif-subject')?.value||'';
+  const msg=document.getElementById('notif-msg')?.value||'';
+  const channel=document.getElementById('notif-channel')?.value||'Email + In-App';
+  if(!subject||!msg){toast('⚠️ Subject and message are required');return;}
+  S.sentNotifs.unshift({to,subject,msg,date:'26 Jul 2026',channel});
+  S.notifTarget='';
+  render();toast(`📣 Notification sent to ${to}`);
+}
+
+// ══════════════════════════════════════
+// REPORTS
+// ══════════════════════════════════════
+function rReports(){
+  const t=S.rptTab;
+  return`
+  <div class="pg-header">
+    <div class="pg-title">Reports</div>
+    <button class="btn btn-s" onclick="toast('Report exported as CSV')">Export CSV ↓</button>
+  </div>
+  <div class="tab-bar">
+    <div class="tab ${t==='item'?'on':''}" onclick="S.rptTab='item';render()">Item-wise</div>
+    <div class="tab ${t==='month'?'on':''}" onclick="S.rptTab='month';render()">Month-wise</div>
+    <div class="tab ${t==='outlet'?'on':''}" onclick="S.rptTab='outlet';render()">Outlet-wise</div>
+  </div>
+  <div class="filter-bar" style="margin-bottom:16px;">
+    <select class="filter-select" onchange="toast('Loading '+this.value+' data...')">
+      <option>July 2026</option><option>June 2026</option><option>Q2 2026</option><option>FY 2026</option>
+    </select>
+    <select class="filter-select" onchange="toast('Filtering by '+this.value)">
+      <option>All Franchises</option>
+      ${S.franchises.map(f=>`<option>${f.name}</option>`).join('')}
+    </select>
+  </div>
+
+  ${t==='item'?`
+    <div class="card">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Item</th><th>Total Orders</th><th>Qty Sold</th><th>Revenue</th><th>% of Total</th><th>Trend</th></tr></thead>
+        <tbody>
+          ${[{n:'Chicken Shawarma Mix',em:'🍖',orders:156,qty:'1,240 kg',rev:372000,pct:40,trend:'↑ 18%',up:true},
+             {n:'Pita Bread',em:'🫓',orders:148,qty:'18,500 units',rev:277500,pct:30,trend:'↑ 5%',up:true},
+             {n:'Garlic Mayo',em:'🧄',orders:102,qty:'408 kg',rev:81600,pct:9,trend:'—'},
+             {n:'French Fries',em:'🍟',orders:89,qty:'534 kg',rev:64080,pct:7,trend:'↓ 8%',up:false},
+             {n:'Peri Peri Sauce',em:'🌶️',orders:76,qty:'228 kg',rev:68400,pct:7,trend:'↑ 3%',up:true},
+             {n:'Hummus',em:'🫙',orders:64,qty:'192 kg',rev:67200,pct:7,trend:'↑ 12%',up:true},
+          ].map(r=>`<tr class="no-hover">
+            <td><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:20px;">${r.em}</span><span style="font-weight:600;">${r.n}</span></div></td>
+            <td>${r.orders}</td>
+            <td style="color:var(--muted);">${r.qty}</td>
+            <td><span style="font-family:'Poppins',sans-serif;font-weight:700;">₹${r.rev.toLocaleString()}</span></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;max-width:80px;height:6px;background:var(--sbdr);border-radius:3px;"><div style="width:${r.pct*2.5}%;height:100%;background:var(--sf);border-radius:3px;"></div></div>
+                <span style="font-size:12px;color:var(--muted);">${r.pct}%</span>
+              </div>
+            </td>
+            <td style="font-weight:600;color:${r.trend.includes('↑')?'var(--sage)':r.trend.includes('↓')?'var(--ember)':'var(--muted)'};">${r.trend}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`
+  :t==='month'?`
+    <div class="stats-grid">
+      ${[{m:'July 2026',rev:'₹3,81,000',orders:156,delta:'↑ 12%',up:true},{m:'June 2026',rev:'₹3,40,000',orders:138,delta:'↑ 8%',up:true},{m:'May 2026',rev:'₹3,15,000',orders:124,delta:'↑ 5%',up:true},{m:'April 2026',rev:'₹2,99,000',orders:118,delta:'↑ 2%',up:true}].map(m=>`
+        <div class="stat-card" style="cursor:default;">
+          <div class="stat-label">${m.m}</div>
+          <div class="stat-value">${m.rev}</div>
+          <div class="stat-delta ${m.up?'delta-up':'delta-dn'}">${m.delta} · ${m.orders} orders</div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="cb">
+        <div class="card-title">Monthly Revenue Trend</div>
+        <div style="display:flex;align-items:flex-end;gap:12px;height:140px;padding:10px 0;">
+          ${[{h:42,m:'Feb'},{h:52,m:'Mar'},{h:45,m:'Apr'},{h:68,m:'May'},{h:76,m:'Jun'},{h:91,m:'Jul'}].map((b,i)=>`
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <span style="font-size:12px;font-weight:700;color:var(--txt);">₹${[2.1,2.6,2.99,3.15,3.4,3.81][i]}L</span>
+              <div style="width:100%;flex:1;display:flex;align-items:flex-end;">
+                <div style="width:100%;height:${b.h}%;background:${i===5?'var(--sf)':'rgba(232,168,56,.35)'};border-radius:6px 6px 0 0;"></div>
+              </div>
+              <span style="font-size:12px;color:var(--muted);">${b.m}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`
+  :`
+    <div class="card">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Franchise</th><th>Orders</th><th>Revenue</th><th>Avg Order Value</th><th>Outstanding</th><th>Performance</th></tr></thead>
+        <tbody>
+          ${S.franchises.map(f=>{
+            const outstanding=S.pending.filter(p=>p.fid===f.id).reduce((s,p)=>s+p.amt,0);
+            const avg=Math.round(f.revenue/Math.max(f.orders,1));
+            const pct=Math.round(f.revenue/S.franchises.reduce((s,x)=>s+x.revenue,0)*100);
+            return`<tr class="no-hover">
+              <td><div style="font-weight:700;">${f.name}</div><div class="tbl-muted">${f.owner}</div></td>
+              <td><span style="font-weight:600;">${f.orders}</span></td>
+              <td><span style="font-family:'Poppins',sans-serif;font-weight:700;">₹${(f.revenue/1000).toFixed(0)}K</span></td>
+              <td style="color:var(--muted);">₹${avg.toLocaleString()}</td>
+              <td style="color:${outstanding>0?'var(--ember)':'var(--sage)'}; font-weight:600;">${outstanding>0?'₹'+outstanding.toLocaleString():'Clear'}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="flex:1;height:7px;background:var(--sbdr);border-radius:4px;"><div style="width:${pct}%;height:100%;background:${f.status==='paused'?'var(--bdr)':'var(--sf)'};border-radius:4px;"></div></div>
+                  <span style="font-size:12.5px;font-weight:700;width:30px;">${pct}%</span>
+                </div>
+              </td>
+            </tr>`;}).join('')}
+        </tbody>
+      </table></div>
+    </div>`}`;
+}
+
+// ══════════════════════════════════════
+// ORDER ACTIONS
+// ══════════════════════════════════════
+let invCounter=990;
+function fulfillOrder(id,ev){
+  if(ev) ev.stopPropagation();
+  const o=S.orders.find(x=>x.id===id);
+  if(!o) return;
+  o.status='fulfilled';
+  invCounter++;
+  const invId='INV-0'+invCounter;
+  o.invoiceId=invId;
+  const fr=S.franchises.find(f=>f.id===o.fid);
+  S.pending.push({id:'P'+Date.now(),inv:invId,fid:o.fid,fr:o.fr,oid:o.id,amt:o.amt,due:'2 Aug 2026',status:'pending',reminderSent:false});
+  updateBadges();render();
+  toast(`⚡ #${id} fulfilled — Invoice ${invId} generated & sent to ${o.fr}`);
+}
+
+function markDelivered(id,ev){
+  if(ev) ev.stopPropagation();
+  const o=S.orders.find(x=>x.id===id);
+  if(o) o.status='delivered';
+  updateBadges();render();
+  toast(`✅ #${id} marked as delivered`);
+}
+
+// ══════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════
+function openModal(type,data){
+  const box=document.getElementById('modal-box');
+  box.className='modal-box';
+  if(type==='order-detail') box.classList.add('wide');
+  box.innerHTML=modalContent(type,data);
+  document.getElementById('modal').classList.add('on');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('on');
+}
+
+function openOrderModal(id){openModal('order-detail',id);}
+function openAmendModal(id,ev){if(ev)ev.stopPropagation();openModal('amend-review',id);}
+
+function modalContent(type,data){
+  if(type==='order-detail'){
+    const o=S.orders.find(x=>x.id===data);
+    if(!o) return '<p>Not found</p>';
+    const items=o.itemList||[{n:'Chicken Shawarma Mix',q:5,u:'kg',p:300},{n:'Pita Bread',q:200,u:'units',p:15},{n:'Garlic Mayo',q:2.5,u:'kg',p:200}];
+    const sub=items.reduce((s,i)=>s+i.q*i.p,0);
+    const gst=Math.round(sub*.05);
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">#${o.id}</div><div class="modal-sub">${o.fr} · ${o.date}</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">${bg(o.status)} ${bg(o.pay)} ${o.invoiceId?`<span class="bge bg-fulfilled">${o.invoiceId}</span>`:''}</div>
+      <table class="tbl" style="margin-bottom:16px;">
+        <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+        <tbody>
+          ${items.map(i=>`<tr class="no-hover"><td style="font-weight:600;">${i.n}</td><td>${i.q} ${i.u}</td><td>₹${i.p}</td><td><strong>₹${(i.q*i.p).toLocaleString()}</strong></td></tr>`).join('')}
+        </tbody>
+      </table>
+      <div style="background:var(--sbdr);border-radius:8px;padding:12px 16px;">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13.5px;"><span style="color:var(--muted)">Subtotal</span><span>₹${sub.toLocaleString()}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13.5px;"><span style="color:var(--muted)">GST (5%)</span><span>₹${gst.toLocaleString()}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0 0;font-family:'Poppins',sans-serif;font-weight:700;font-size:17px;border-top:1px solid var(--bdr);margin-top:4px;"><span>Total</span><span>₹${o.amt.toLocaleString()}</span></div>
+      </div>
+      <div class="form-footer">
+        ${o.status==='pending'?`<button class="btn btn-sky" onclick="closeModal();openFulfillModal('${o.id}')">⚡ Fulfill & Edit Quantities</button>`:''}
+        ${o.status==='fulfilled'?`<button class="btn btn-success" onclick="markDelivered('${o.id}');closeModal()">✓ Mark Delivered</button>`:''}
+        <button class="btn btn-s" onclick="toast('Invoice downloaded')">📄 Download Invoice</button>
+        <button class="btn btn-s" onclick="closeModal()">Close</button>
+      </div>`;
+  }
+
+  if(type==='amend-review'){
+    const o=S.orders.find(x=>x.id===data);
+    if(!o||!o.amendment) return '<p>No amendment data</p>';
+    const orig=o.itemList||[];
+    const amend=o.amendment.items||[];
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">Review Amendment — #${o.id}</div><div class="modal-sub">${o.fr} · Reason: ${o.amendment.reason}</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Original Order</div>
+          ${orig.map(i=>`<div style="padding:7px 10px;background:var(--sbdr);border-radius:7px;margin-bottom:6px;font-size:13px;"><strong>${i.n}</strong><br><span style="color:var(--muted);">${i.q} ${i.u} · ₹${(i.q*i.p).toLocaleString()}</span></div>`).join('')}
+          <div style="padding:10px;background:var(--bdr);border-radius:7px;font-weight:700;font-size:14px;">Total: ₹${orig.reduce((s,i)=>s+i.q*i.p,0).toLocaleString()}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#B45309;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Requested Changes</div>
+          ${amend.map(i=>{
+            const was=orig.find(x=>x.n===i.n);
+            const changed=was&&was.q!==i.q;
+            return`<div style="padding:7px 10px;background:${changed?'var(--amber-dim)':'var(--sbdr)'};border:${changed?'1px solid #FDE68A':'none'};border-radius:7px;margin-bottom:6px;font-size:13px;"><strong>${i.n}</strong>${changed?` <span style="font-size:11px;color:#92400E;font-weight:700;">(was ${was.q}→${i.q})</span>`:''}<br><span style="color:var(--muted);">${i.q} ${i.u} · ₹${(i.q*i.p).toLocaleString()}</span></div>`;}).join('')}
+          <div style="padding:10px;background:var(--amber-dim);border-radius:7px;font-weight:700;font-size:14px;color:#92400E;">Total: ₹${amend.reduce((s,i)=>s+i.q*i.p,0).toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-success" onclick="approveAmend('${o.id}')">✓ Approve & Generate New Invoice</button>
+        <button class="btn btn-danger" onclick="rejectAmend('${o.id}')">✗ Reject Amendment</button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  if(type==='add-item'){
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">Add New Item</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="form-group"><label class="form-label">Item Name</label><input class="form-input" id="ni-name" placeholder="e.g. Shawarma Spice Blend"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Price (₹)</label><input class="form-input" id="ni-price" type="number" placeholder="0" min="1"></div>
+        <div class="form-group"><label class="form-label">Unit</label><select class="form-input" id="ni-unit"><option>kg</option><option>units</option><option>litres</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="ni-em" placeholder="🫙" maxlength="2"></div>
+        <div class="form-group"><label class="form-label">Initial Status</label><select class="form-input" id="ni-status"><option value="active">Active</option><option value="paused">Paused</option></select></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-p" onclick="saveNewItem()">Add to Inventory</button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  if(type==='edit-item'){
+    const item=S.inventory.find(i=>i.id===data);
+    if(!item) return '';
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">Edit Item — ${item.name}</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="form-group"><label class="form-label">Item Name</label><input class="form-input" id="ei-name" value="${item.name}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Price (₹)</label><input class="form-input" id="ei-price" type="number" value="${item.price}"></div>
+        <div class="form-group"><label class="form-label">Unit</label><select class="form-input" id="ei-unit"><option ${item.unit==='kg'?'selected':''}>kg</option><option ${item.unit==='units'?'selected':''}>units</option><option ${item.unit==='litres'?'selected':''}>litres</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="ei-em" value="${item.em}" maxlength="2"></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="ei-status"><option value="active" ${item.status==='active'?'selected':''}>Active</option><option value="paused" ${item.status==='paused'?'selected':''}>Paused</option></select></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-p" onclick="saveEditItem('${item.id}')">Save Changes</button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  if(type==='add-franchise'){
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">New Franchise</div><div class="modal-sub">Login credentials will be auto-generated</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="form-group"><label class="form-label">Outlet Name / Location</label><input class="form-input" id="nf-name" placeholder="e.g. Marathahalli"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Owner Name</label><input class="form-input" id="nf-owner" placeholder="Full name"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="nf-phone" placeholder="10-digit mobile"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="nf-email" placeholder="owner@example.com" type="email"></div>
+      <div class="form-group"><label class="form-label">Outlet Address</label><textarea class="form-textarea" id="nf-addr" rows="2" placeholder="Full address..."></textarea></div>
+      <div class="form-footer">
+        <button class="btn btn-p" onclick="createFranchise()">Create Franchise & Send Credentials</button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  if(type==='view-franchise'){
+    const f=S.franchises.find(x=>x.id===data);
+    if(!f) return '';
+    const fOrders=S.orders.filter(o=>o.fid===f.id);
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">${f.name} Outlet</div><div class="modal-sub">${f.owner} · Member since ${f.since}</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="stats-grid" style="margin-bottom:16px;grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card" style="cursor:default;"><div class="stat-label">Total Orders</div><div class="stat-value">${f.orders}</div></div>
+        <div class="stat-card" style="cursor:default;"><div class="stat-label">Revenue</div><div class="stat-value" style="font-size:20px;">₹${(f.revenue/1000).toFixed(0)}K</div></div>
+        <div class="stat-card" style="cursor:default;"><div class="stat-label">Status</div><div style="margin-top:8px;">${bg(f.status)}</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <div class="form-group" style="margin-bottom:0;"><label class="form-label">Email</label><div style="font-size:14px;padding:8px 0;">${f.email}</div></div>
+        <div class="form-group" style="margin-bottom:0;"><label class="form-label">Login ID</label><div style="font-size:14px;padding:8px 0;font-family:monospace;">${f.name.toLowerCase().replace(/ /g,'.')}@sha3</div></div>
+      </div>
+      <div class="form-label" style="margin-bottom:8px;">Recent Orders</div>
+      ${fOrders.length===0?'<p style="color:var(--muted);font-size:13px;">No orders yet</p>':`
+        <table class="tbl">
+          <thead><tr><th>Order ID</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>${fOrders.slice(0,4).map(o=>`<tr class="no-hover"><td class="tbl-id">#${o.id}</td><td style="color:var(--muted);">${o.date}</td><td style="font-weight:700;">₹${o.amt.toLocaleString()}</td><td>${bg(o.status)}</td></tr>`).join('')}</tbody>
+        </table>`}
+      <div class="form-footer">
+        <button class="btn btn-danger" onclick="toggleFranchise('${f.id}','${f.status==='active'?'paused':'active'}');closeModal()">${f.status==='active'?'Pause Franchise':'Activate Franchise'}</button>
+        <button class="btn btn-s" onclick="sendNotifTo('${f.name}');closeModal()">Send Message</button>
+        <button class="btn btn-s" onclick="closeModal()">Close</button>
+      </div>`;
+  }
+
+  if(type==='fulfill-order'){
+    const o=S.orders.find(x=>x.id===data);
+    if(!o) return '';
+    const items=o.itemList||[{n:'Chicken Shawarma Mix',q:5,u:'kg',p:300},{n:'Pita Bread',q:200,u:'units',p:15},{n:'Garlic Mayo',q:2.5,u:'kg',p:200}];
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">Fulfill Order #${o.id}</div><div class="modal-sub">${o.fr} · Edit quantities if any item is out of stock or short</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="alert alert-info" style="margin-bottom:16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Reduce a quantity to 0 to remove an item. The franchise owner will see exactly what was fulfilled. A revised invoice is auto-generated.
+      </div>
+      <table class="tbl" style="margin-bottom:16px;">
+        <thead><tr><th>Item</th><th>Ordered</th><th>Fulfilling</th><th>Unit Price</th></tr></thead>
+        <tbody>
+          ${items.map((i,idx)=>`
+            <tr class="no-hover">
+              <td style="font-weight:600;">${i.n}</td>
+              <td style="color:var(--muted);">${i.q} ${i.u}</td>
+              <td><input type="number" id="ful-q-${idx}" value="${i.q}" min="0" step="${i.u==='units'?1:0.5}"
+                style="width:80px;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:6px;font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;"
+                oninput="this.style.borderColor=parseFloat(this.value)<${i.q}?'var(--ember)':'var(--bdr)'"></td>
+              <td style="color:var(--muted);">₹${i.p}/${i.u}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      <div id="ful-total-preview" style="background:var(--sbdr);border-radius:8px;padding:12px 16px;font-size:13.5px;color:var(--muted);">
+        Adjust quantities above to see revised total.
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-sky" onclick="confirmFulfill('${o.id}',${JSON.stringify(items)})">⚡ Confirm & Generate Invoice</button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  if(type==='add-recipe'){
+    const items=S.inventory.filter(i=>i.status==='active');
+    const opts=items.map(i=>`<option>${i.name}</option>`).join('');
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">Add Ordering Template</div><div class="modal-sub">Suggest items when a franchise orders the trigger item</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Trigger Item</div>
+      <div style="display:grid;grid-template-columns:1fr 100px 80px;gap:10px;margin-bottom:16px;">
+        <div class="form-group" style="margin:0;"><label class="form-label">When ordering…</label><select class="form-input" id="rt-trigger">${opts}</select></div>
+        <div class="form-group" style="margin:0;"><label class="form-label">Min Qty</label><input class="form-input" id="rt-qty" type="number" value="5" min="1"></div>
+        <div class="form-group" style="margin:0;"><label class="form-label">Unit</label><select class="form-input" id="rt-unit"><option>kg</option><option>units</option><option>litres</option></select></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Suggested Items</div>
+        <button class="btn btn-s btn-sm" type="button" onclick="addSuggestRow()">+ Add Item</button>
+      </div>
+      <div id="suggest-rows">
+        ${[1,2].map(n=>`
+          <div class="form-row suggest-row" style="gap:10px;margin-bottom:8px;" id="srow-${n}">
+            <div class="form-group" style="margin:0;"><select class="form-input" name="s-item">${n===2?`<option value="">— Remove —</option>`:''}<option>Garlic Mayo</option>${opts}</select></div>
+            <div class="form-group" style="margin:0;flex:0 0 80px;"><input class="form-input" type="number" name="s-qty" value="${n===1?2.5:1}" min="0.5" step="0.5" placeholder="Qty"></div>
+            <div class="form-group" style="margin:0;flex:0 0 80px;"><select class="form-input" name="s-unit"><option>kg</option><option>units</option></select></div>
+          </div>`).join('')}
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-p" onclick="saveRecipe()">Save Template</button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  if(type==='add-product-recipe'||type==='edit-product-recipe'){
+    const isEdit=type==='edit-product-recipe';
+    const pr=isEdit?S.productRecipes.find(r=>r.id===data):null;
+    const ingrs=pr?pr.ingredients:[
+      {name:'',qty:80,unit:'g',type:'raw'},{name:'',qty:1,unit:'units',type:'packaging',cost:5}
+    ];
+    return`
+      <div class="modal-hd">
+        <div><div class="modal-title">${isEdit?'Edit':'New'} Product Recipe</div><div class="modal-sub">Define what goes into one serving of this menu item</div></div>
+        <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 80px 60px;gap:10px;margin-bottom:14px;">
+        <div class="form-group" style="margin:0;"><label class="form-label">Product Name</label><input class="form-input" id="pr-name" value="${pr?.name||''}" placeholder="e.g. Regular Shawarma"></div>
+        <div class="form-group" style="margin:0;"><label class="form-label">Category</label><select class="form-input" id="pr-cat"><option>Wraps</option><option>Sides</option><option>Drinks</option><option>Combos</option></select></div>
+        <div class="form-group" style="margin:0;"><label class="form-label">Selling ₹</label><input class="form-input" id="pr-price" type="number" value="${pr?.sellingPrice||180}" min="1"></div>
+        <div class="form-group" style="margin:0;"><label class="form-label">Icon</label><input class="form-input" id="pr-em" value="${pr?.em||'🥙'}" maxlength="2"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Ingredients</div>
+        <button class="btn btn-s btn-sm" type="button" onclick="addIngredientRow()">+ Add Ingredient</button>
+      </div>
+      <div style="background:var(--sbdr);border-radius:7px;padding:8px 10px;margin-bottom:8px;display:grid;grid-template-columns:1fr 70px 70px 80px 28px;gap:8px;">
+        <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Ingredient Name</span>
+        <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Qty</span>
+        <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Unit</span>
+        <span style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Type</span>
+        <span></span>
+      </div>
+      <div id="ingredient-rows" style="max-height:280px;overflow-y:auto;">
+        ${ingrs.map((i,idx)=>`
+          <div class="ingredient-row" style="display:grid;grid-template-columns:1fr 70px 70px 80px 28px;gap:8px;margin-bottom:6px;" id="irow-${idx}">
+            <input class="form-input" name="ing-name" value="${i.name}" placeholder="e.g. Chicken Shawarma Mix" style="padding:8px 10px;font-size:13px;">
+            <input class="form-input" name="ing-qty" type="number" value="${i.qty}" min="0.1" step="0.1" style="padding:8px;font-size:13px;text-align:center;">
+            <select class="form-input" name="ing-unit" style="padding:8px;font-size:13px;">
+              <option ${i.unit==='g'?'selected':''}>g</option>
+              <option ${i.unit==='ml'?'selected':''}>ml</option>
+              <option ${i.unit==='units'?'selected':''}>units</option>
+              <option ${i.unit==='kg'?'selected':''}>kg</option>
+            </select>
+            <select class="form-input" name="ing-type" style="padding:8px;font-size:12px;">
+              <option value="raw" ${i.type==='raw'?'selected':''}>Raw</option>
+              <option value="packaging" ${i.type==='packaging'?'selected':''}>Packaging</option>
+              <option value="condiment" ${i.type==='condiment'?'selected':''}>Condiment</option>
+            </select>
+            <button onclick="this.closest('.ingredient-row').remove()" style="background:var(--ember-dim);color:var(--ember);border:none;border-radius:6px;cursor:pointer;width:28px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>`).join('')}
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-p" onclick="saveProductRecipe(${isEdit?`'${pr.id}'`:'null'})">
+          ${isEdit?'Save Changes':'Create Recipe'}
+        </button>
+        <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+      </div>`;
+  }
+
+  return`<div class="modal-hd"><div class="modal-title">Modal</div><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><p>Content</p>`;
+}
+
+// ── Fulfill with edit ──
+function openFulfillModal(id,ev){
+  if(ev) ev.stopPropagation();
+  openModal('fulfill-order',id);
+}
+function confirmFulfill(id,originalItems){
+  const o=S.orders.find(x=>x.id===id);
+  if(!o) return;
+  // Read quantities from inputs
+  const rows=document.querySelectorAll('[id^="ful-q-"]');
+  const fulfilled=originalItems.map((item,idx)=>{
+    const inp=document.getElementById('ful-q-'+idx);
+    const q=inp?parseFloat(inp.value)||0:item.q;
+    return{...item,q};
+  }).filter(i=>i.q>0);
+  const sub=fulfilled.reduce((s,i)=>s+i.q*i.p,0);
+  const gst=Math.round(sub*.05);
+  o.itemList=fulfilled;
+  o.items=fulfilled.length;
+  o.amt=sub+gst;
+  o.status='fulfilled';
+  invCounter++;
+  const invId='INV-0'+invCounter;
+  o.invoiceId=invId;
+  S.pending.push({id:'P'+Date.now(),inv:invId,fid:o.fid,fr:o.fr,oid:o.id,amt:o.amt,due:'2 Aug 2026',status:'pending',reminderSent:false});
+  const changed=fulfilled.some((fi,idx)=>fi.q!==originalItems[idx]?.q);
+  closeModal();updateBadges();render();
+  toast(`⚡ #${id} fulfilled${changed?' (quantities adjusted)':''} — Invoice ${invId} generated & sent to ${o.fr}`);
+}
+
+// ── Ordering template ──
+function addSuggestRow(){
+  const container=document.getElementById('suggest-rows');
+  if(!container) return;
+  const n=container.querySelectorAll('.suggest-row').length+1;
+  const opts=S.inventory.filter(i=>i.status==='active').map(i=>`<option>${i.name}</option>`).join('');
+  const div=document.createElement('div');
+  div.className='form-row suggest-row';
+  div.style.cssText='gap:10px;margin-bottom:8px;';
+  div.innerHTML=`
+    <div class="form-group" style="margin:0;"><select class="form-input" name="s-item"><option value="">— Remove —</option>${opts}</select></div>
+    <div class="form-group" style="margin:0;flex:0 0 80px;"><input class="form-input" type="number" name="s-qty" value="1" min="0.5" step="0.5"></div>
+    <div class="form-group" style="margin:0;flex:0 0 80px;"><select class="form-input" name="s-unit"><option>kg</option><option>units</option></select></div>
+    <button onclick="this.closest('.suggest-row').remove()" style="background:var(--ember-dim);color:var(--ember);border:none;border-radius:6px;cursor:pointer;padding:8px 10px;font-size:12px;font-weight:600;white-space:nowrap;">Remove</button>`;
+  container.appendChild(div);
+}
+
+// ── Product recipe ──
+function addIngredientRow(){
+  const container=document.getElementById('ingredient-rows');
+  if(!container) return;
+  const idx=container.querySelectorAll('.ingredient-row').length;
+  const div=document.createElement('div');
+  div.className='ingredient-row';
+  div.style.cssText='display:grid;grid-template-columns:1fr 70px 70px 80px 28px;gap:8px;margin-bottom:6px;';
+  div.innerHTML=`
+    <input class="form-input" name="ing-name" value="" placeholder="Ingredient name" style="padding:8px 10px;font-size:13px;">
+    <input class="form-input" name="ing-qty" type="number" value="1" min="0.1" step="0.1" style="padding:8px;font-size:13px;text-align:center;">
+    <select class="form-input" name="ing-unit" style="padding:8px;font-size:13px;"><option>g</option><option>ml</option><option>units</option><option>kg</option></select>
+    <select class="form-input" name="ing-type" style="padding:8px;font-size:12px;"><option value="raw">Raw</option><option value="packaging">Packaging</option><option value="condiment">Condiment</option></select>
+    <button onclick="this.closest('.ingredient-row').remove()" style="background:var(--ember-dim);color:var(--ember);border:none;border-radius:6px;cursor:pointer;width:28px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>`;
+  container.appendChild(div);
+}
+
+function saveProductRecipe(editId){
+  const name=document.getElementById('pr-name')?.value?.trim();
+  const price=parseFloat(document.getElementById('pr-price')?.value||0);
+  const cat=document.getElementById('pr-cat')?.value||'Wraps';
+  const em=document.getElementById('pr-em')?.value||'🥙';
+  if(!name||!price){toast('⚠️ Name and selling price required');return;}
+  const rows=document.querySelectorAll('#ingredient-rows .ingredient-row');
+  const ingredients=Array.from(rows).map(row=>({
+    name:row.querySelector('[name="ing-name"]')?.value?.trim()||'',
+    qty:parseFloat(row.querySelector('[name="ing-qty"]')?.value||0),
+    unit:row.querySelector('[name="ing-unit"]')?.value||'g',
+    type:row.querySelector('[name="ing-type"]')?.value||'raw',
+    invId:S.inventory.find(i=>i.name===row.querySelector('[name="ing-name"]')?.value?.trim())?.id||null,
+    cost:row.querySelector('[name="ing-type"]')?.value==='packaging'?1:undefined,
+  })).filter(i=>i.name&&i.qty>0);
+  if(ingredients.length===0){toast('⚠️ Add at least one ingredient');return;}
+  if(editId){
+    const pr=S.productRecipes.find(r=>r.id===editId);
+    if(pr){Object.assign(pr,{name,sellingPrice:price,category:cat,em,ingredients});}
+  } else {
+    S.productRecipes.push({id:'pr'+Date.now(),name,sellingPrice:price,category:cat,em,ingredients});
+  }
+  closeModal();render();toast(`✅ "${name}" recipe ${editId?'updated':'created'}`);
+}
+
+// ── Modal actions ──
+function saveNewItem(){
+  const name=document.getElementById('ni-name')?.value?.trim();
+  const price=parseFloat(document.getElementById('ni-price')?.value||0);
+  const unit=document.getElementById('ni-unit')?.value||'kg';
+  const em=document.getElementById('ni-em')?.value||'📦';
+  const status=document.getElementById('ni-status')?.value||'active';
+  if(!name||!price){toast('⚠️ Name and price are required');return;}
+  S.inventory.push({id:'i'+Date.now(),name,price,unit,status,em});
+  closeModal();render();toast(`✅ "${name}" added to inventory`);
+}
+function saveEditItem(id){
+  const item=S.inventory.find(i=>i.id===id);
+  if(!item) return;
+  item.name=document.getElementById('ei-name')?.value||item.name;
+  item.price=parseFloat(document.getElementById('ei-price')?.value)||item.price;
+  item.unit=document.getElementById('ei-unit')?.value||item.unit;
+  item.em=document.getElementById('ei-em')?.value||item.em;
+  item.status=document.getElementById('ei-status')?.value||item.status;
+  closeModal();render();toast(`✅ "${item.name}" updated`);
+}
+function createFranchise(){
+  const name=document.getElementById('nf-name')?.value?.trim();
+  const owner=document.getElementById('nf-owner')?.value?.trim();
+  const email=document.getElementById('nf-email')?.value?.trim();
+  const phone=document.getElementById('nf-phone')?.value?.trim();
+  if(!name||!owner||!email){toast('⚠️ Name, owner and email are required');return;}
+  const id='F'+Date.now();
+  const loginId=name.toLowerCase().replace(/ /g,'.')+Math.floor(Math.random()*900+100);
+  S.franchises.push({id,name,owner,email,phone,status:'active',since:'Jul 2026',orders:0,revenue:0});
+  closeModal();render();
+  toast(`✅ ${name} created! Login: ${loginId}@sha3 — credentials emailed to ${email}`);
+}
+function approveAmend(id){
+  const o=S.orders.find(x=>x.id===id);
+  if(!o||!o.amendment) return;
+  invCounter++;
+  const invId='INV-0'+invCounter;
+  o.itemList=o.amendment.items;
+  const sub=o.amendment.items.reduce((s,i)=>s+i.q*i.p,0);
+  o.amt=Math.round(sub*1.05);
+  o.status='fulfilled';
+  o.invoiceId=invId;
+  o.amendment=null;
+  closeModal();updateBadges();render();
+  toast(`✅ Amendment approved — New invoice ${invId} generated & sent to ${o.fr}`);
+}
+function rejectAmend(id){
+  const o=S.orders.find(x=>x.id===id);
+  if(o){o.status='pending';o.amendment=null;}
+  closeModal();updateBadges();render();
+  toast(`Amendment rejected — #${id} reverted to pending`);
+}
+function saveRecipe(){
+  const trigger=document.getElementById('rt-trigger')?.value;
+  const tQty=parseFloat(document.getElementById('rt-qty')?.value)||5;
+  const tUnit=document.getElementById('rt-unit')?.value||'kg';
+  if(!trigger){toast('⚠️ Select a trigger item');return;}
+  const rows=document.querySelectorAll('#suggest-rows .suggest-row');
+  const suggests=Array.from(rows).map(row=>({
+    item:row.querySelector('[name="s-item"]')?.value||'',
+    qty:parseFloat(row.querySelector('[name="s-qty"]')?.value)||1,
+    unit:row.querySelector('[name="s-unit"]')?.value||'kg',
+  })).filter(s=>s.item&&s.item!=='— Remove —');
+  if(suggests.length===0){toast('⚠️ Add at least one suggested item');return;}
+  S.recipes.push({id:'r'+Date.now(),trigger,tQty,tUnit,suggests});
+  closeModal();render();toast('✅ Ordering template saved');
+}
+
+// ══════════════════════════════════════
+// TOAST + SEARCH
+// ══════════════════════════════════════
+let _tt;
+function toast(msg){
+  const t=document.getElementById('toast-el');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('on'),3500);
+}
+function handleGlobalSearch(v){
+  if(!v) return;
+  const ord=S.orders.find(o=>o.id.toLowerCase().includes(v.toLowerCase()));
+  if(ord){S.ordFil.search=v;go('orders');}
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+updateBadges();render();
+</script>
+</body>
+</html>
