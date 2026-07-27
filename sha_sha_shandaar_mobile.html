@@ -20,12 +20,26 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:#d0d0d0;
   overflow:hidden;position:relative;display:flex;flex-direction:column;
   box-shadow:0 40px 100px rgba(0,0,0,0.4),0 0 0 11px #111,0 0 0 13px #444;}
 
-/* ── On real mobile devices, fill the viewport ── */
-@media (max-width:500px){
-  html,body{background:var(--cream);align-items:stretch;justify-content:stretch;overflow:hidden;}
-  #app{width:100%;height:100vh;height:100dvh;border-radius:0;box-shadow:none;}
+/* On real mobile: fill full screen, respect notches */
+@media(max-width:500px){
+  html{height:100%;height:100dvh;}
+  body{background:var(--cream);align-items:stretch;justify-content:stretch;
+    overflow:hidden;height:100dvh;
+    padding:env(safe-area-inset-top) 0 0 0;}
+  #app{width:100%;height:100%;border-radius:0;box-shadow:none;}
+  .bn{padding-bottom:env(safe-area-inset-bottom);height:calc(var(--BNH) + env(safe-area-inset-bottom));}
+  .sec,#cnt{overflow-x:hidden;max-width:100vw;}
+  .card{max-width:100%;overflow:hidden;}
+  .sg{grid-template-columns:1fr 1fr;}
+  .cr{padding-right:0;}
+  /* Report bars — clip long names */
+  .rb-h span:first-child{max-width:55vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* PnL grids */
+  .pr-l span{font-size:12px;}
+  /* Yield grid */
+  .yield-mini-grid{grid-template-columns:1fr 1fr !important;}
 }
-@media (max-height:500px){
+@media(max-height:500px){
   #app{height:100vh;}
 }
 
@@ -964,7 +978,7 @@ function rPnL(){
                 <div style="flex:1;font-weight:700;font-size:14px;">${pr.name}</div>
                 <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:var(--sage);">₹${pr.sellingPrice}</div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;margin-bottom:8px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;margin-bottom:8px;" class="yield-mini-grid">
                 <div style="background:var(--sf-dim);border-radius:7px;padding:8px;">
                   <div style="color:var(--muted);font-weight:600;margin-bottom:2px;">Raw Materials</div>
                   <div style="font-weight:700;">₹${rawCost.toFixed(1)}</div>
