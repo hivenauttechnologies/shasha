@@ -219,15 +219,45 @@ body{font-family:'Inter',sans-serif;background:var(--page);color:var(--txt);disp
 .empty-icon{font-size:36px;margin-bottom:10px;}
 .empty p{font-size:14px;}
 
-/* ── NOTIFICATION LOG ── */
-.notif-compose{display:grid;grid-template-columns:1fr 360px;gap:20px;}
+/* ── RESPONSIVE MOBILE ── */
+.hamburger{display:none;width:36px;height:36px;border-radius:8px;background:var(--sbdr);border:1.5px solid var(--bdr);cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;}
+.hamburger svg{width:18px;height:18px;stroke:var(--txt);fill:none;stroke-width:2;}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;}
+.sb-overlay.on{display:block;}
+
+@media(max-width:900px){
+  body{overflow:auto;}
+  .sb{position:fixed;left:-100%;top:0;bottom:0;z-index:200;transition:left .25s ease;width:260px;height:100vh;}
+  .sb.open{left:0;}
+  .main{width:100%;}
+  .topbar{padding:0 14px;gap:10px;}
+  .hamburger{display:flex;}
+  .topbar-search input{width:120px;}
+  .content{padding:14px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .dash-grid{grid-template-columns:1fr;}
+  .notif-compose{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tbl{min-width:600px;}
+  .modal-box,.modal-box.wide{width:calc(100vw - 32px);max-height:90vh;margin:16px;}
+  .recipe-grid{grid-template-columns:1fr;}
+  .pg-header{flex-direction:column;align-items:flex-start;gap:10px;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr;}
+  .topbar-search{display:none;}
+}
 .notif-log-item{padding:13px 0;border-bottom:1px solid var(--bdr);display:flex;gap:12px;}
 .notif-log-item:last-child{border-bottom:none;}
 </style>
 </head>
 <body>
+<!-- SIDEBAR OVERLAY -->
+<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
 <!-- SIDEBAR -->
-<aside class="sb">
+<aside class="sb" id="sidebar">
   <div class="sb-logo">
     <div class="sb-brand">Sha Sha Shandaar<br>Shawarma</div>
     <div class="sb-tag">Admin Dashboard</div>
@@ -284,6 +314,9 @@ body{font-family:'Inter',sans-serif;background:var(--page);color:var(--txt);disp
 <!-- MAIN -->
 <div class="main">
   <header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
     <div class="topbar-title" id="topbar-title">Dashboard</div>
     <div class="topbar-search">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -416,6 +449,15 @@ const S={
 // ══════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sb-overlay').classList.toggle('on');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('on');
+}
+
 const TITLES={dashboard:'Dashboard',orders:'All Orders',inventory:'Inventory Management',recipes:'Item Templates',franchises:'Franchises & Users',payments:'Payments',notifications:'Notifications',reports:'Reports'};
 
 function go(sc){
@@ -423,6 +465,7 @@ function go(sc){
   document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('on'));
   const nav=document.getElementById('nav-'+sc);
   if(nav) nav.classList.add('on');
+  closeSidebar();
   document.getElementById('topbar-title').textContent=TITLES[sc]||sc;
   updateBadges();
   render();
